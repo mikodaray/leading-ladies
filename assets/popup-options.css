@@ -1,0 +1,16 @@
+.qsk-popup__wrapper {
+    width: unset !important;
+}
+
+.qsk-popup__body {
+    width: 400px;
+}
+
+.qsk-popup__box-content {
+    display: none;
+}
+
+.qsk-popup__box-image {
+    height: 550px !important;
+    width: 100% !important;
+}
