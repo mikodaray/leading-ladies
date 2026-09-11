@@ -1,5 +1,6 @@
 {%- style -%}
   #LwlExperience-{{ section.id }} {
+    font-family: 'RocaOne', var(--font-heading-family);
     padding: 6rem 2rem;
     background: #fcc0c5;
     text-align: center;
@@ -15,42 +16,43 @@
     max-width: 100rem;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: 3.2rem 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 0;
+    text-align: left;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
   }
 
   #LwlExperience-{{ section.id }} .lwl-experience__item {
+    position: relative;
+    padding: 3.2rem 2.8rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(1.6rem);
+    transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.3s ease;
   }
 
   #LwlExperience-{{ section.id }} .lwl-experience__item.is-visible {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 
-  #LwlExperience-{{ section.id }} .lwl-experience__circle {
-    width: 9rem;
-    height: 9rem;
-    margin: 0 auto 1.6rem;
-    border-radius: 50%;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.4rem;
-    box-shadow: 0 1rem 2.5rem rgba(18, 18, 18, 0.15);
-    transition: transform 0.3s ease;
+  #LwlExperience-{{ section.id }} .lwl-experience__item:hover {
+    background-color: rgba(255, 255, 255, 0.12);
   }
 
-  #LwlExperience-{{ section.id }} .lwl-experience__item:hover .lwl-experience__circle {
-    transform: scale(1.08) rotate(-4deg);
+  #LwlExperience-{{ section.id }} .lwl-experience__number {
+    display: block;
+    font-size: 4.4rem;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0 0 1.6rem;
   }
 
   #LwlExperience-{{ section.id }} .lwl-experience__label {
     color: #ffffff;
-    font-size: 1.7rem;
+    font-size: 1.9rem;
     margin: 0;
   }
 
@@ -70,7 +72,7 @@
   <div class="lwl-experience__grid">
     {%- for block in section.blocks -%}
       <div class="lwl-experience__item" data-lwl-reveal {{ block.shopify_attributes }}>
-        <div class="lwl-experience__circle" aria-hidden="true">{{ block.settings.icon }}</div>
+        <span class="lwl-experience__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
         <p class="lwl-experience__label">{{ block.settings.label | escape }}</p>
       </div>
     {%- endfor -%}
@@ -113,7 +115,6 @@
       "type": "item",
       "name": "Item",
       "settings": [
-        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "✨" },
         { "type": "text", "id": "label", "label": "Label" }
       ]
     }
@@ -122,12 +123,12 @@
     {
       "name": "LWL Experience",
       "blocks": [
-        { "type": "item", "settings": { "icon": "🤝", "label": "Networking Sessions" } },
-        { "type": "item", "settings": { "icon": "🎙️", "label": "Founder Conversations" } },
-        { "type": "item", "settings": { "icon": "🎤", "label": "Leadership Panels" } },
-        { "type": "item", "settings": { "icon": "🚀", "label": "Collaboration Opportunities" } },
-        { "type": "item", "settings": { "icon": "🫶", "label": "Community Building" } },
-        { "type": "item", "settings": { "icon": "💫", "label": "Inspiring Stories" } }
+        { "type": "item", "settings": { "label": "Networking Sessions" } },
+        { "type": "item", "settings": { "label": "Founder Conversations" } },
+        { "type": "item", "settings": { "label": "Leadership Panels" } },
+        { "type": "item", "settings": { "label": "Collaboration Opportunities" } },
+        { "type": "item", "settings": { "label": "Community Building" } },
+        { "type": "item", "settings": { "label": "Inspiring Stories" } }
       ]
     }
   ]

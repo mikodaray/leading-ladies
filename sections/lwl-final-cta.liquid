@@ -1,5 +1,6 @@
 {%- style -%}
   #LwlFinalCta-{{ section.id }} {
+    font-family: 'RocaOne', var(--font-heading-family);
     position: relative;
     padding: 8rem 2rem;
     text-align: center;
@@ -10,7 +11,6 @@
   #LwlFinalCta-{{ section.id }} .lwl-final-cta__bg {
     position: absolute;
     inset: 0;
-    z-index: 0;
   }
 
   #LwlFinalCta-{{ section.id }} .lwl-final-cta__bg img {
@@ -19,10 +19,11 @@
     object-fit: cover;
   }
 
-  #LwlFinalCta-{{ section.id }} .lwl-final-cta__scrim {
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__bg::after {
+    content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(18, 18, 18, 0.85) 0%, rgba(237, 58, 49, 0.55) 100%);
+    background: linear-gradient(180deg, rgba(18, 18, 18, 0.88) 0%, rgba(237, 58, 49, 0.75) 100%);
   }
 
   #LwlFinalCta-{{ section.id }} .lwl-final-cta__inner {
@@ -35,6 +36,7 @@
   #LwlFinalCta-{{ section.id }} .lwl-final-cta__heading {
     font-size: clamp(3rem, 5.5vw, 5rem);
     margin: 0 0 2rem;
+    color: #fcc0c5;
   }
 
   #LwlFinalCta-{{ section.id }} .lwl-final-cta__copy {
@@ -84,12 +86,11 @@
 {%- endstyle -%}
 
 <div id="LwlFinalCta-{{ section.id }}" class="lwl-final-cta">
-  <div class="lwl-final-cta__bg">
-    {%- if section.settings.background_image != blank -%}
+  {%- if section.settings.background_image != blank -%}
+    <div class="lwl-final-cta__bg">
       <img src="{{ section.settings.background_image | image_url: width: 1800 }}" alt="" loading="lazy">
-    {%- endif -%}
-  </div>
-  <div class="lwl-final-cta__scrim"></div>
+    </div>
+  {%- endif -%}
   <div class="lwl-final-cta__inner">
     {%- if section.settings.heading != blank -%}
       <h2 class="lwl-final-cta__heading">{{ section.settings.heading | escape }}</h2>

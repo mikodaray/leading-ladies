@@ -1,5 +1,6 @@
 {%- style -%}
   #LwlSlider-{{ section.id }} {
+    font-family: 'RocaOne', var(--font-heading-family);
     position: relative;
     height: 70vh;
     min-height: 40rem;
@@ -23,7 +24,8 @@
     object-fit: cover;
   }
 
-  #LwlSlider-{{ section.id }} .lwl-slider__scrim {
+  #LwlSlider-{{ section.id }} .lwl-slider__slide::after {
+    content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(0deg, rgba(18, 18, 18, 0.7) 0%, rgba(18, 18, 18, 0.1) 50%);
@@ -77,7 +79,6 @@
           alt="{{ block.settings.image.alt | escape }}"
           loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
         >
-        <div class="lwl-slider__scrim"></div>
         {%- if block.settings.caption != blank -%}
           <p class="lwl-slider__caption">{{ block.settings.caption | escape }}</p>
         {%- endif -%}

@@ -1,5 +1,6 @@
 {%- style -%}
   #LwlHero-{{ section.id }} {
+    font-family: 'RocaOne', var(--font-heading-family);
     position: relative;
     overflow: hidden;
     min-height: 92vh;
@@ -59,10 +60,20 @@
     transform: scale(1);
   }
 
-  #LwlHero-{{ section.id }} .lwl-hero__scrim {
+  #LwlHero-{{ section.id }} .lwl-hero__mosaic::after {
+    content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(18, 18, 18, 0.65) 0%, rgba(237, 58, 49, 0.55) 55%, rgba(18, 18, 18, 0.85) 100%);
+    background: linear-gradient(180deg, rgba(18, 18, 18, 0.35) 0%, rgba(18, 18, 18, 0.15) 50%, rgba(18, 18, 18, 0.5) 100%);
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__card {
+    position: relative;
+    z-index: 1;
+    background-color: rgba(237, 58, 49, 0.88);
+    border-radius: 2.4rem;
+    padding: 4.4rem 4rem;
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.35);
   }
 
   #LwlHero-{{ section.id }} .lwl-hero__inner {
@@ -105,6 +116,18 @@
     margin: 0 0 1.4rem;
     opacity: 0;
     animation: lwl-fade-up 0.8s ease forwards 0.25s;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__heading--logo {
+    max-width: 24rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__heading--logo img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   #LwlHero-{{ section.id }} .lwl-hero__subheading {
@@ -218,6 +241,13 @@
     box-shadow: 0 1.4rem 3rem rgba(0, 0, 0, 0.3);
   }
 
+  @media screen and (max-width: 749px) {
+    #LwlHero-{{ section.id }} .lwl-hero__card {
+      padding: 2.8rem 2rem;
+      border-radius: 1.6rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     #LwlHero-{{ section.id }} * {
       animation: none !important;
@@ -242,13 +272,24 @@
       {%- endif -%}
     {%- endfor -%}
   </div>
-  <div class="lwl-hero__scrim"></div>
 
   <div class="lwl-hero__inner">
+   <div class="lwl-hero__card">
     {%- if section.settings.eyebrow != blank -%}
       <span class="lwl-hero__eyebrow">{{ section.settings.eyebrow | escape }}</span>
     {%- endif -%}
-    {%- if section.settings.heading != blank -%}
+    {%- if section.settings.logo_image != blank -%}
+      <h1 class="lwl-hero__heading lwl-hero__heading--logo">
+        <img
+          src="{{ section.settings.logo_image | image_url: width: 480 }}"
+          srcset="{{ section.settings.logo_image | image_url: width: 320 }} 320w, {{ section.settings.logo_image | image_url: width: 480 }} 480w"
+          sizes="(min-width: 750px) 24rem, 60vw"
+          alt="{{ section.settings.heading | default: 'Ladies Who Launch' | escape }}"
+          width="{{ section.settings.logo_image.width }}"
+          height="{{ section.settings.logo_image.height }}"
+        >
+      </h1>
+    {%- elsif section.settings.heading != blank -%}
       <h1 class="lwl-hero__heading">{{ section.settings.heading | escape }}</h1>
     {%- endif -%}
     {%- if section.settings.subheading != blank -%}
@@ -286,12 +327,13 @@
           <span aria-hidden="true">&rarr;</span>
         </a>
       {%- endif -%}
-      {%- if section.settings.secondary_label != blank and section.settings.secondary_anchor != blank -%}
-        <a href="#{{ section.settings.secondary_anchor }}" class="lwl-hero__cta lwl-hero__cta--secondary">
+      {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
+        <a href="{{ section.settings.secondary_link }}" class="lwl-hero__cta lwl-hero__cta--secondary">
           {{ section.settings.secondary_label | escape }}
         </a>
       {%- endif -%}
     </div>
+   </div>
   </div>
 </div>
 
@@ -364,8 +406,13 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
+      "label": "Heading (used as image alt text if a logo image is set)",
       "default": "Ladies Who Launch: Season 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image (replaces the text heading if set)"
     },
     {
       "type": "text",
@@ -403,10 +450,9 @@
       "default": "Learn More"
     },
     {
-      "type": "text",
-      "id": "secondary_anchor",
-      "label": "Secondary button scroll-to section ID",
-      "default": "lwl-story"
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
     }
   ],
   "blocks": [

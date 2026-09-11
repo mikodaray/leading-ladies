@@ -29,6 +29,29 @@
   .footer__content-bottom.scroll-trigger.animate--slide-in {
     display: none;
   }
+
+  .footer-block__icon-link {
+    display: inline-block !important;
+  }
+
+  .footer-block__icon-link img {
+    display: block;
+    width: 150px;
+    height: auto;
+    margin-top: -30px;
+    margin-bottom: -60px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .footer-block {
+      text-align: center;
+    }
+
+    .footer-block__icon-link {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 {%- endstyle -%}
 
 <footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
@@ -95,12 +118,27 @@
                       <ul class="footer-block__details-content list-unstyled">
                         {%- for link in block.settings.menu.links -%}
                           <li>
-                            <a
-                              href="{{ link.url }}"
-                              class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}"
-                            >
-                              {{ link.title | escape }}
-                            </a>
+                            {%- if block.settings.icon_link_match != blank and block.settings.icon_link_image != blank and link.url contains block.settings.icon_link_match -%}
+                              <a
+                                href="{{ link.url }}"
+                                class="link list-menu__item list-menu__item--link footer-block__icon-link{% if link.active %} list-menu__item--active{% endif %}"
+                              >
+                                <img
+                                  src="{{ block.settings.icon_link_image | image_url: width: 160 }}"
+                                  alt="{{ link.title | escape }}"
+                                  width="{{ block.settings.icon_link_image.width }}"
+                                  height="{{ block.settings.icon_link_image.height }}"
+                                  loading="lazy"
+                                >
+                              </a>
+                            {%- else -%}
+                              <a
+                                href="{{ link.url }}"
+                                class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}"
+                              >
+                                {{ link.title | escape }}
+                              </a>
+                            {%- endif -%}
                           </li>
                         {%- endfor -%}
                       </ul>
@@ -348,6 +386,21 @@
           "default": "footer",
           "label": "t:sections.footer.blocks.link_list.settings.menu.label",
           "info": "t:sections.footer.blocks.link_list.settings.menu.info"
+        },
+        {
+          "type": "header",
+          "content": "Icon link (optional)"
+        },
+        {
+          "type": "text",
+          "id": "icon_link_match",
+          "label": "Link URL contains",
+          "info": "If a menu link's URL contains this text, it renders as the icon image below instead of plain text."
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_link_image",
+          "label": "Icon image"
         }
       ]
     },

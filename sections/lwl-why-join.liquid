@@ -1,5 +1,6 @@
 {%- style -%}
   #LwlWhyJoin-{{ section.id }} {
+    font-family: 'RocaOne', var(--font-heading-family);
     padding: 6rem 2rem;
     background: #fff5f5;
     text-align: center;
@@ -21,10 +22,17 @@
   }
 
   #LwlWhyJoin-{{ section.id }} .lwl-why__card {
-    background: #ffffff;
+    position: relative;
+    background-color: #ed3a31;
+    background-size: cover;
+    background-position: center;
     border-radius: 1.6rem;
     padding: 3.2rem 2.6rem;
-    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.06);
+    min-height: 22rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.12);
     opacity: 0;
     transform: translateY(2.4rem);
     transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
@@ -36,25 +44,19 @@
   }
 
   #LwlWhyJoin-{{ section.id }} .lwl-why__card.is-visible:hover {
-    box-shadow: 0 1.6rem 3.5rem rgba(237, 58, 49, 0.15);
+    box-shadow: 0 1.6rem 3.5rem rgba(237, 58, 49, 0.3);
     transform: translateY(-0.6rem) scale(1.02);
-  }
-
-  #LwlWhyJoin-{{ section.id }} .lwl-why__icon {
-    font-size: 3.2rem;
-    display: block;
-    margin-bottom: 1.6rem;
   }
 
   #LwlWhyJoin-{{ section.id }} .lwl-why__title {
     font-size: 2.1rem;
     margin: 0 0 0.8rem;
-    color: #121212;
+    color: #ffffff;
   }
 
   #LwlWhyJoin-{{ section.id }} .lwl-why__text {
     font-size: 1.5rem;
-    color: rgba(18, 18, 18, 0.7);
+    color: rgba(255, 255, 255, 0.9);
     margin: 0;
   }
 
@@ -73,10 +75,14 @@
   {%- endif -%}
   <div class="lwl-why__grid">
     {%- for block in section.blocks -%}
-      <div class="lwl-why__card" data-lwl-reveal {{ block.shopify_attributes }}>
-        {%- if block.settings.icon != blank -%}
-          <span class="lwl-why__icon" aria-hidden="true">{{ block.settings.icon }}</span>
-        {%- endif -%}
+      <div
+        class="lwl-why__card"
+        data-lwl-reveal
+        {% if block.settings.image != blank %}
+          style="background-image: linear-gradient(180deg, rgba(237, 58, 49, 0.55) 0%, rgba(237, 58, 49, 0.9) 100%), url('{{ block.settings.image | image_url: width: 700 }}');"
+        {% endif %}
+        {{ block.shopify_attributes }}
+      >
         {%- if block.settings.title != blank -%}
           <h3 class="lwl-why__title">{{ block.settings.title | escape }}</h3>
         {%- endif -%}
@@ -124,7 +130,7 @@
       "type": "feature",
       "name": "Feature",
       "settings": [
-        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "✨" },
+        { "type": "image_picker", "id": "image", "label": "Background image" },
         { "type": "text", "id": "title", "label": "Title" },
         { "type": "textarea", "id": "text", "label": "Description" }
       ]
@@ -134,12 +140,12 @@
     {
       "name": "LWL Why Join",
       "blocks": [
-        { "type": "feature", "settings": { "icon": "🤝", "title": "Meaningful Connections", "text": "Meet women who share your ambition and vision." } },
-        { "type": "feature", "settings": { "icon": "💬", "title": "Inspiring Conversations", "text": "Learn from founders, entrepreneurs, and leaders." } },
-        { "type": "feature", "settings": { "icon": "🫶", "title": "Community Support", "text": "Find encouragement, accountability, and connection." } },
-        { "type": "feature", "settings": { "icon": "🚀", "title": "Collaboration Opportunities", "text": "Build partnerships and business relationships." } },
-        { "type": "feature", "settings": { "icon": "📈", "title": "Leadership Growth", "text": "Gain fresh insights and new perspectives." } },
-        { "type": "feature", "settings": { "icon": "💞", "title": "Lasting Relationships", "text": "Create connections that continue beyond the event." } }
+        { "type": "feature", "settings": { "title": "Meaningful Connections", "text": "Meet women who share your ambition and vision." } },
+        { "type": "feature", "settings": { "title": "Inspiring Conversations", "text": "Learn from founders, entrepreneurs, and leaders." } },
+        { "type": "feature", "settings": { "title": "Community Support", "text": "Find encouragement, accountability, and connection." } },
+        { "type": "feature", "settings": { "title": "Collaboration Opportunities", "text": "Build partnerships and business relationships." } },
+        { "type": "feature", "settings": { "title": "Leadership Growth", "text": "Gain fresh insights and new perspectives." } },
+        { "type": "feature", "settings": { "title": "Lasting Relationships", "text": "Create connections that continue beyond the event." } }
       ]
     }
   ]
