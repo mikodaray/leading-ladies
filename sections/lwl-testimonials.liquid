@@ -1,0 +1,186 @@
+{%- style -%}
+  #LwlTestimonials-{{ section.id }} {
+    position: relative;
+    padding: 7rem 2rem;
+    overflow: hidden;
+    text-align: center;
+    color: #ffffff;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(12px) brightness(0.5);
+    transform: scale(1.1);
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 76rem;
+    margin: 0 auto;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__heading {
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    margin: 0 0 4rem;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__track {
+    position: relative;
+    min-height: 16rem;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__slide.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    position: relative;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__quote {
+    font-size: 2rem;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0 0 2rem;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__author {
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: #fcc0c5;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 2.4rem;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease;
+  }
+
+  #LwlTestimonials-{{ section.id }} .lwl-testimonials__dot.is-active {
+    background: #ed3a31;
+  }
+{%- endstyle -%}
+
+<div id="LwlTestimonials-{{ section.id }}" class="lwl-testimonials">
+  <div class="lwl-testimonials__bg">
+    {%- if section.settings.background_image != blank -%}
+      <img src="{{ section.settings.background_image | image_url: width: 1600 }}" alt="" loading="lazy">
+    {%- endif -%}
+  </div>
+  <div class="lwl-testimonials__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="lwl-testimonials__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <div class="lwl-testimonials__track">
+      {%- for block in section.blocks -%}
+        <div class="lwl-testimonials__slide{% if forloop.first %} is-active{% endif %}" data-lwl-slide {{ block.shopify_attributes }}>
+          <p class="lwl-testimonials__quote">&ldquo;{{ block.settings.quote | escape }}&rdquo;</p>
+          {%- if block.settings.author != blank -%}
+            <p class="lwl-testimonials__author">{{ block.settings.author | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="lwl-testimonials__dots" data-lwl-dots></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('LwlTestimonials-{{ section.id }}');
+    if (!root) return;
+
+    var slides = Array.prototype.slice.call(root.querySelectorAll('[data-lwl-slide]'));
+    var dotsWrap = root.querySelector('[data-lwl-dots]');
+    if (!slides.length) return;
+
+    var dots = slides.map(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'lwl-testimonials__dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', 'Show testimonial ' + (i + 1));
+      dot.addEventListener('click', function () { goTo(i); });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    var current = 0;
+
+    function goTo(index) {
+      slides[current].classList.remove('is-active');
+      dots[current].classList.remove('is-active');
+      current = index;
+      slides[current].classList.add('is-active');
+      dots[current].classList.add('is-active');
+    }
+
+    setInterval(function () {
+      goTo((current + 1) % slides.length);
+    }, 6000);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LWL Testimonials",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What Our Community Says" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "author", "label": "Author" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LWL Testimonials",
+      "blocks": [
+        { "type": "testimonial", "settings": { "quote": "Leading Ladies introduced me to an incredible network of women who have become mentors, collaborators, and friends.", "author": "" } },
+        { "type": "testimonial", "settings": { "quote": "Every event leaves me inspired and empowered to take the next step in my journey.", "author": "" } },
+        { "type": "testimonial", "settings": { "quote": "The conversations, connections, and opportunities I've gained through this community have been invaluable.", "author": "" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

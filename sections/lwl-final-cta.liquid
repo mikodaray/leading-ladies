@@ -1,0 +1,136 @@
+{%- style -%}
+  #LwlFinalCta-{{ section.id }} {
+    position: relative;
+    padding: 8rem 2rem;
+    text-align: center;
+    color: #ffffff;
+    overflow: hidden;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(18, 18, 18, 0.85) 0%, rgba(237, 58, 49, 0.55) 100%);
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__heading {
+    font-size: clamp(3rem, 5.5vw, 5rem);
+    margin: 0 0 2rem;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__copy {
+    font-size: 1.7rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 3.6rem;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__copy p {
+    margin: 0 0 1.2rem;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 700;
+    font-size: 1.7rem;
+    padding: 1.5rem 3.6rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__button--primary {
+    background: #fcc0c5;
+    color: #121212;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__button--secondary {
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    color: #ffffff;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__button:hover {
+    transform: translateY(-0.3rem);
+  }
+{%- endstyle -%}
+
+<div id="LwlFinalCta-{{ section.id }}" class="lwl-final-cta">
+  <div class="lwl-final-cta__bg">
+    {%- if section.settings.background_image != blank -%}
+      <img src="{{ section.settings.background_image | image_url: width: 1800 }}" alt="" loading="lazy">
+    {%- endif -%}
+  </div>
+  <div class="lwl-final-cta__scrim"></div>
+  <div class="lwl-final-cta__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="lwl-final-cta__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.copy != blank -%}
+      <div class="lwl-final-cta__copy">{{ section.settings.copy }}</div>
+    {%- endif -%}
+    <div class="lwl-final-cta__actions">
+      {%- if section.settings.primary_label != blank and section.settings.primary_link != blank -%}
+        <a href="{{ section.settings.primary_link }}" class="lwl-final-cta__button lwl-final-cta__button--primary">
+          {{ section.settings.primary_label | escape }}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
+        <a href="{{ section.settings.secondary_link }}" class="lwl-final-cta__button lwl-final-cta__button--secondary">
+          {{ section.settings.secondary_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "LWL Final CTA",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Your Next Connection Could Change Everything" },
+    { "type": "richtext", "id": "copy", "label": "Copy" },
+    { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Register Now" },
+    { "type": "url", "id": "primary_link", "label": "Primary button link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Join The Community" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary button link" }
+  ],
+  "presets": [
+    { "name": "LWL Final CTA" }
+  ]
+}
+{% endschema %}

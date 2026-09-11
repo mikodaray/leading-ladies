@@ -1,0 +1,192 @@
+{%- comment -%}
+  Shared lightbox for Ladies Who Launch page galleries.
+  Any image can open it by calling window.lwlLightbox.open(items, startIndex),
+  where items is an array of { src, alt }.
+{%- endcomment -%}
+<div id="LwlLightbox" class="lwl-lightbox" aria-hidden="true">
+  <div class="lwl-lightbox__backdrop" data-lwl-lightbox-close></div>
+  <button type="button" class="lwl-lightbox__close" data-lwl-lightbox-close aria-label="Close">&times;</button>
+  <button type="button" class="lwl-lightbox__nav lwl-lightbox__nav--prev" data-lwl-lightbox-prev aria-label="Previous image">&larr;</button>
+  <div class="lwl-lightbox__stage">
+    <img class="lwl-lightbox__image" data-lwl-lightbox-image src="" alt="">
+  </div>
+  <button type="button" class="lwl-lightbox__nav lwl-lightbox__nav--next" data-lwl-lightbox-next aria-label="Next image">&rarr;</button>
+</div>
+
+{%- style -%}
+  .lwl-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .lwl-lightbox.is-open {
+    display: flex;
+    opacity: 1;
+  }
+
+  .lwl-lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(18, 18, 18, 0.9);
+  }
+
+  .lwl-lightbox__stage {
+    position: relative;
+    z-index: 1;
+    max-width: 90vw;
+    max-height: 85vh;
+  }
+
+  .lwl-lightbox__image {
+    display: block;
+    max-width: 90vw;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    border-radius: 0.8rem;
+    box-shadow: 0 2rem 6rem rgba(0, 0, 0, 0.5);
+  }
+
+  .lwl-lightbox__close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 2;
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    border: none;
+    background: #fcc0c5;
+    color: #121212;
+    font-size: 2.6rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .lwl-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .lwl-lightbox__nav:hover {
+    background: #ed3a31;
+  }
+
+  .lwl-lightbox__nav--prev {
+    left: 2rem;
+  }
+
+  .lwl-lightbox__nav--next {
+    right: 2rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .lwl-lightbox__close {
+      top: 1rem;
+      right: 1rem;
+      width: 3.8rem;
+      height: 3.8rem;
+      font-size: 2.2rem;
+    }
+    .lwl-lightbox__nav {
+      width: 3.8rem;
+      height: 3.8rem;
+      font-size: 1.6rem;
+    }
+    .lwl-lightbox__nav--prev {
+      left: 0.6rem;
+    }
+    .lwl-lightbox__nav--next {
+      right: 0.6rem;
+    }
+  }
+{%- endstyle -%}
+
+<script>
+  window.lwlLightbox = (function () {
+    var root = document.getElementById('LwlLightbox');
+    if (!root) return { open: function () {} };
+
+    var imageEl = root.querySelector('[data-lwl-lightbox-image]');
+    var items = [];
+    var index = 0;
+
+    function render() {
+      var item = items[index];
+      if (!item) return;
+      imageEl.src = item.src;
+      imageEl.alt = item.alt || '';
+    }
+
+    function open(newItems, startIndex) {
+      items = newItems || [];
+      index = startIndex || 0;
+      if (!items.length) return;
+      render();
+      root.classList.add('is-open');
+      root.setAttribute('aria-hidden', 'false');
+      document.addEventListener('keydown', onKeydown);
+    }
+
+    function close() {
+      root.classList.remove('is-open');
+      root.setAttribute('aria-hidden', 'true');
+      document.removeEventListener('keydown', onKeydown);
+    }
+
+    function next() {
+      if (!items.length) return;
+      index = (index + 1) % items.length;
+      render();
+    }
+
+    function prev() {
+      if (!items.length) return;
+      index = (index - 1 + items.length) % items.length;
+      render();
+    }
+
+    function onKeydown(event) {
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowRight') next();
+      if (event.key === 'ArrowLeft') prev();
+    }
+
+    root.querySelectorAll('[data-lwl-lightbox-close]').forEach(function (el) {
+      el.addEventListener('click', close);
+    });
+    root.querySelector('[data-lwl-lightbox-next]').addEventListener('click', next);
+    root.querySelector('[data-lwl-lightbox-prev]').addEventListener('click', prev);
+
+    var touchStartX = null;
+    root.querySelector('.lwl-lightbox__stage').addEventListener('touchstart', function (event) {
+      touchStartX = event.touches[0].clientX;
+    });
+    root.querySelector('.lwl-lightbox__stage').addEventListener('touchend', function (event) {
+      if (touchStartX === null) return;
+      var diff = event.changedTouches[0].clientX - touchStartX;
+      if (diff > 40) prev();
+      if (diff < -40) next();
+      touchStartX = null;
+    });
+
+    return { open: open, close: close, next: next, prev: prev };
+  })();
+</script>

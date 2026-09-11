@@ -1,0 +1,168 @@
+{%- style -%}
+  #LwlShowcase-{{ section.id }} {
+    padding: 6rem 0;
+    background: #121212;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__heading {
+    color: #ffffff;
+    text-align: center;
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    margin: 0 0 3.2rem;
+    padding: 0 2rem;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__track {
+    display: flex;
+    gap: 1.6rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding: 0 2rem 2.4rem;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__item {
+    flex: 0 0 auto;
+    width: 28rem;
+    height: 36rem;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    scroll-snap-align: start;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__item:hover {
+    transform: translateY(-0.8rem);
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__progress-track {
+    max-width: 40rem;
+    height: 0.4rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    margin: 0 auto;
+  }
+
+  #LwlShowcase-{{ section.id }} .lwl-showcase__progress-bar {
+    height: 100%;
+    width: 10%;
+    background: #ed3a31;
+    border-radius: 999px;
+    transition: width 0.1s linear;
+  }
+{%- endstyle -%}
+
+<div id="LwlShowcase-{{ section.id }}" class="lwl-showcase">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="lwl-showcase__heading">{{ section.settings.heading | escape }}</h2>
+  {%- endif -%}
+  <div class="lwl-showcase__track" data-lwl-drag-scroll>
+    {%- for block in section.blocks -%}
+      {%- if block.settings.image != blank -%}
+        <div class="lwl-showcase__item" {{ block.shopify_attributes }}>
+          <img
+            src="{{ block.settings.image | image_url: width: 600 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            loading="lazy"
+          >
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  <div class="lwl-showcase__progress-track">
+    <div class="lwl-showcase__progress-bar" data-lwl-progress></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var track = document.querySelector('#LwlShowcase-{{ section.id }} [data-lwl-drag-scroll]');
+    var progress = document.querySelector('#LwlShowcase-{{ section.id }} [data-lwl-progress]');
+    if (!track) return;
+
+    var isDown = false;
+    var startX, scrollLeftStart;
+
+    track.addEventListener('mousedown', function (e) {
+      isDown = true;
+      track.classList.add('is-dragging');
+      startX = e.pageX - track.offsetLeft;
+      scrollLeftStart = track.scrollLeft;
+    });
+    window.addEventListener('mouseup', function () {
+      isDown = false;
+      track.classList.remove('is-dragging');
+    });
+    window.addEventListener('mousemove', function (e) {
+      if (!isDown) return;
+      e.preventDefault();
+      var x = e.pageX - track.offsetLeft;
+      var walk = (x - startX) * 1.2;
+      track.scrollLeft = scrollLeftStart - walk;
+    });
+
+    function updateProgress() {
+      var maxScroll = track.scrollWidth - track.clientWidth;
+      var pct = maxScroll > 0 ? (track.scrollLeft / maxScroll) * 100 : 0;
+      if (progress) progress.style.width = Math.max(6, pct) + '%';
+    }
+
+    track.addEventListener('scroll', updateProgress);
+    updateProgress();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LWL Showcase",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Experience the Leading Ladies Community" }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LWL Showcase",
+      "blocks": [
+        { "type": "image" }, { "type": "image" }, { "type": "image" }, { "type": "image" },
+        { "type": "image" }, { "type": "image" }, { "type": "image" }, { "type": "image" },
+        { "type": "image" }, { "type": "image" }, { "type": "image" }, { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

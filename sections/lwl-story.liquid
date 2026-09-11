@@ -1,0 +1,187 @@
+{%- style -%}
+  #LwlStory-{{ section.id }} {
+    padding: 6rem 2rem;
+    background: #fff5f5;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__inner {
+    max-width: 110rem;
+    margin: 0 auto;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__header {
+    max-width: 70rem;
+    margin: 0 auto 4rem;
+    text-align: center;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__heading {
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    color: #ed3a31;
+    margin: 0 0 1.6rem;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__copy {
+    font-size: 1.6rem;
+    line-height: 1.7;
+    color: rgba(18, 18, 18, 0.75);
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__copy p {
+    margin: 0 0 1.2rem;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__masonry {
+    columns: 3 20rem;
+    column-gap: 1.6rem;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__item {
+    break-inside: avoid;
+    margin-bottom: 1.6rem;
+    border-radius: 1.2rem;
+    overflow: hidden;
+    cursor: zoom-in;
+    position: relative;
+    opacity: 0;
+    transform: translateY(2rem);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.4s ease;
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__item:hover img {
+    transform: scale(1.06);
+  }
+
+  #LwlStory-{{ section.id }} .lwl-story__item:hover {
+    box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #LwlStory-{{ section.id }} .lwl-story__item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{%- endstyle -%}
+
+<div id="LwlStory-{{ section.id }}" class="lwl-story">
+  <div class="lwl-story__inner">
+    <div class="lwl-story__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="lwl-story__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.copy != blank -%}
+        <div class="lwl-story__copy">{{ section.settings.copy }}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="lwl-story__masonry">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.image != blank -%}
+          <div
+            class="lwl-story__item"
+            data-lwl-reveal
+            data-lwl-gallery-item
+            data-src="{{ block.settings.image | image_url: width: 1400 }}"
+            data-alt="{{ block.settings.image.alt | escape }}"
+            {{ block.shopify_attributes }}
+          >
+            <img
+              src="{{ block.settings.image | image_url: width: 700 }}"
+              srcset="{{ block.settings.image | image_url: width: 500 }} 500w, {{ block.settings.image | image_url: width: 700 }} 700w"
+              sizes="(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw"
+              alt="{{ block.settings.image.alt | escape }}"
+              loading="lazy"
+            >
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% render 'lwl-lightbox' %}
+
+<script>
+  (function () {
+    var root = document.getElementById('LwlStory-{{ section.id }}');
+    if (!root) return;
+
+    var items = Array.prototype.slice.call(root.querySelectorAll('[data-lwl-gallery-item]'));
+    if (!items.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (c) { c.classList.add('is-visible'); });
+    } else {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry, i) {
+          if (entry.isIntersecting) {
+            setTimeout(function () { entry.target.classList.add('is-visible'); }, (i % 6) * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      items.forEach(function (c) { observer.observe(c); });
+    }
+
+    var galleryItems = items.map(function (el) {
+      return { src: el.dataset.src, alt: el.dataset.alt };
+    });
+
+    items.forEach(function (el, index) {
+      el.addEventListener('click', function () {
+        if (window.lwlLightbox) window.lwlLightbox.open(galleryItems, index);
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LWL Story",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Four Years of Meaningful Connections" },
+    { "type": "richtext", "id": "copy", "label": "Copy" }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LWL Story",
+      "blocks": [
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

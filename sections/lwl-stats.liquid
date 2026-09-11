@@ -1,0 +1,123 @@
+{%- style -%}
+  #LwlStats-{{ section.id }} {
+    padding: 5rem 2rem;
+    background: #ffffff;
+  }
+
+  #LwlStats-{{ section.id }} .lwl-stats__grid {
+    max-width: 110rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 2rem;
+  }
+
+  #LwlStats-{{ section.id }} .lwl-stats__card {
+    background: #fff5f5;
+    border-radius: 1.6rem;
+    padding: 3rem 2.4rem;
+    text-align: center;
+    border: 1px solid rgba(237, 58, 49, 0.1);
+    opacity: 0;
+    transform: translateY(2rem);
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease, translate 0.3s ease;
+  }
+
+  #LwlStats-{{ section.id }} .lwl-stats__card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #LwlStats-{{ section.id }} .lwl-stats__card.is-visible:hover {
+    box-shadow: 0 1.6rem 3.5rem rgba(237, 58, 49, 0.15);
+    transform: translateY(-0.5rem);
+  }
+
+  #LwlStats-{{ section.id }} .lwl-stats__value {
+    font-size: 3.4rem;
+    color: #ed3a31;
+    margin: 0 0 0.8rem;
+  }
+
+  #LwlStats-{{ section.id }} .lwl-stats__text {
+    font-size: 1.5rem;
+    color: rgba(18, 18, 18, 0.7);
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #LwlStats-{{ section.id }} .lwl-stats__card {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{%- endstyle -%}
+
+<div id="LwlStats-{{ section.id }}" class="lwl-stats">
+  <div class="lwl-stats__grid">
+    {%- for block in section.blocks -%}
+      <div class="lwl-stats__card" data-lwl-reveal {{ block.shopify_attributes }}>
+        {%- if block.settings.value != blank -%}
+          <h3 class="lwl-stats__value">{{ block.settings.value | escape }}</h3>
+        {%- endif -%}
+        {%- if block.settings.text != blank -%}
+          <p class="lwl-stats__text">{{ block.settings.text | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+  (function () {
+    var cards = document.querySelectorAll('#LwlStats-{{ section.id }} [data-lwl-reveal]');
+    if (!cards.length) return;
+    if (!('IntersectionObserver' in window)) {
+      cards.forEach(function (c) { c.classList.add('is-visible'); });
+      return;
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry, i) {
+        if (entry.isIntersecting) {
+          setTimeout(function () { entry.target.classList.add('is-visible'); }, i * 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    cards.forEach(function (c) { observer.observe(c); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LWL Stats",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "4 Years Strong" },
+        { "type": "textarea", "id": "text", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LWL Stats",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "4 Years Strong", "text": "Building meaningful connections among women leaders." } },
+        { "type": "stat", "settings": { "value": "Growing Community", "text": "A thriving network of entrepreneurs and professionals." } },
+        { "type": "stat", "settings": { "value": "Regular Sold-Out Events", "text": "Curated experiences designed for authentic connection." } },
+        { "type": "stat", "settings": { "value": "Countless Collaborations", "text": "Friendships, mentorships, partnerships and opportunities created." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
