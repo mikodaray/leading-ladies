@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "lwl_hero": {
+      "type": "lwl-hero",
+      "settings": {
+        "eyebrow": "Leading Ladies Presents",
+        "heading": "Ladies Who Launch",
+        "subheading": "Season 4",
+        "poster_image": "shopify://shop_images/ladieswholaunch2026.jpg",
+        "event_datetime": "2026-11-14T10:00:00+08:00",
+        "button_label": "Get Your Spot",
+        "button_link": "/collections/ladies-who-launch-season-4"
+      }
+    },
+    "lwl_details": {
+      "type": "lwl-details",
+      "blocks": {
+        "highlight_1": {
+          "type": "highlight",
+          "settings": {
+            "icon": "🎤",
+            "title": "Power Panels",
+            "text": "Deep dive discussions with successful women entrepreneurs sharing their journeys."
+          }
+        },
+        "highlight_2": {
+          "type": "highlight",
+          "settings": {
+            "icon": "💡",
+            "title": "Skill Labs",
+            "text": "Interactive workshops to level up your business game."
+          }
+        },
+        "highlight_3": {
+          "type": "highlight",
+          "settings": {
+            "icon": "🤝",
+            "title": "Connection Corner",
+            "text": "Structured networking sessions to build meaningful relationships."
+          }
+        }
+      },
+      "block_order": ["highlight_1", "highlight_2", "highlight_3"],
+      "settings": {
+        "heading": "What To Expect",
+        "date_label": "November 14, 2026",
+        "time_label": "10:00 AM – 4:00 PM",
+        "venue_label": "Greyhound Cafe, Ayala Triangle Gardens, Makati City"
+      }
+    },
+    "lwl_join": {
+      "type": "lwl-join",
+      "settings": {
+        "heading": "A Movement For Women Who Lead",
+        "body": "<p>Leading Ladies is Cat's community brand — a space built for female entrepreneurs, founders, and creators across the Philippines to inspire each other, sharpen their skills, and rise together. <strong>Ladies Who Launch</strong> is where that mission comes alive for a day: a room full of women who show up, speak up, and build each other up.</p><p>Through power panels with founders who've been exactly where you are, hands-on workshops that turn ideas into action, and the warmth of the Ladies' League community, you'll leave with more than notes — you'll leave with a network, a plan, and the confidence to lead like you were always meant to.</p><p>This isn't just an event. It's a launchpad.</p>",
+        "button_label": "Join Ladies Who Launch",
+        "button_link": "/collections/ladies-who-launch-season-4"
+      }
+    }
+  },
+  "order": ["main", "lwl_hero", "lwl_details", "lwl_join"]
+}

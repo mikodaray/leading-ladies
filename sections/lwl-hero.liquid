@@ -1,0 +1,389 @@
+{%- style -%}
+  #LwlHero-{{ section.id }} {
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 2rem 5rem;
+    background: linear-gradient(160deg, #ed3a31 0%, #fcc0c5 55%, #ed3a31 100%);
+    background-size: 200% 200%;
+    animation: lwl-gradient-shift 12s ease-in-out infinite;
+    text-align: center;
+    color: #ffffff;
+  }
+
+  @keyframes lwl-gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.35;
+    background: #ffffff;
+    pointer-events: none;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__blob--1 {
+    width: 26rem;
+    height: 26rem;
+    top: -8rem;
+    left: -6rem;
+    animation: lwl-float-a 14s ease-in-out infinite;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__blob--2 {
+    width: 20rem;
+    height: 20rem;
+    bottom: -6rem;
+    right: -4rem;
+    background: #121212;
+    opacity: 0.12;
+    animation: lwl-float-b 16s ease-in-out infinite;
+  }
+
+  @keyframes lwl-float-a {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(2rem, 3rem) scale(1.1);
+    }
+  }
+
+  @keyframes lwl-float-b {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(-2rem, -2rem) scale(1.15);
+    }
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 74rem;
+    margin: 0 auto;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__eyebrow {
+    display: inline-block;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+    padding: 0.6rem 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 999px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: lwl-fade-up 0.8s ease forwards 0.1s;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__heading {
+    font-size: clamp(3.6rem, 8vw, 7.2rem);
+    line-height: 0.95;
+    margin: 0 0 1rem;
+    opacity: 0;
+    animation: lwl-fade-up 0.8s ease forwards 0.25s;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__subheading {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    margin: 0 0 3rem;
+    opacity: 0;
+    animation: lwl-fade-up 0.8s ease forwards 0.4s;
+  }
+
+  @keyframes lwl-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__poster-wrapper {
+    position: relative;
+    max-width: 42rem;
+    margin: 0 auto 3.5rem;
+    opacity: 0;
+    animation: lwl-fade-up 0.9s ease forwards 0.55s;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__poster {
+    position: relative;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.35);
+    transform: rotate(-1.5deg);
+    transition: transform 0.4s ease;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__poster:hover {
+    transform: rotate(0deg) scale(1.02);
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__poster img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__poster::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.55) 50%, transparent 60%);
+    background-size: 250% 250%;
+    background-position: -150% -150%;
+    animation: lwl-shine 5s ease-in-out infinite;
+  }
+
+  @keyframes lwl-shine {
+    0%,
+    40% {
+      background-position: -150% -150%;
+    }
+    60%,
+    100% {
+      background-position: 150% 150%;
+    }
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__countdown {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: lwl-fade-up 0.9s ease forwards 0.7s;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__countdown-unit {
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 1.2rem;
+    padding: 1.2rem 1.4rem;
+    min-width: 8rem;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__countdown-value {
+    display: block;
+    font-family: var(--font-heading-family);
+    font-size: 3.2rem;
+    line-height: 1;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__countdown-label {
+    display: block;
+    font-size: 1.1rem;
+    letter-spacing: 0.15rem;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+    opacity: 0.8;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: #ffffff;
+    color: #ed3a31;
+    font-weight: 700;
+    padding: 1.4rem 3.2rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 1.6rem;
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    opacity: 0;
+    animation: lwl-fade-up 0.9s ease forwards 0.85s;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__cta:hover {
+    transform: translateY(-0.3rem);
+    box-shadow: 0 1.4rem 3rem rgba(0, 0, 0, 0.3);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #LwlHero-{{ section.id }},
+    #LwlHero-{{ section.id }} * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+{%- endstyle -%}
+
+<div id="LwlHero-{{ section.id }}" class="lwl-hero">
+  <div class="lwl-hero__blob lwl-hero__blob--1"></div>
+  <div class="lwl-hero__blob lwl-hero__blob--2"></div>
+  <div class="lwl-hero__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="lwl-hero__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h1 class="lwl-hero__heading">{{ section.settings.heading | escape }}</h1>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="lwl-hero__subheading">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.poster_image != blank -%}
+      <div class="lwl-hero__poster-wrapper">
+        <div class="lwl-hero__poster">
+          <img
+            src="{{ section.settings.poster_image | image_url: width: 1200 }}"
+            srcset="
+              {{ section.settings.poster_image | image_url: width: 600 }} 600w,
+              {{ section.settings.poster_image | image_url: width: 900 }} 900w,
+              {{ section.settings.poster_image | image_url: width: 1200 }} 1200w
+            "
+            sizes="(min-width: 750px) 42rem, 90vw"
+            alt="{{ section.settings.poster_image.alt | default: section.settings.heading | escape }}"
+            width="{{ section.settings.poster_image.width }}"
+            height="{{ section.settings.poster_image.height }}"
+            loading="eager"
+          >
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.event_datetime != blank -%}
+      <div class="lwl-hero__countdown" data-lwl-countdown="{{ section.settings.event_datetime }}">
+        <div class="lwl-hero__countdown-unit">
+          <span class="lwl-hero__countdown-value" data-lwl-days>00</span>
+          <span class="lwl-hero__countdown-label">Days</span>
+        </div>
+        <div class="lwl-hero__countdown-unit">
+          <span class="lwl-hero__countdown-value" data-lwl-hours>00</span>
+          <span class="lwl-hero__countdown-label">Hours</span>
+        </div>
+        <div class="lwl-hero__countdown-unit">
+          <span class="lwl-hero__countdown-value" data-lwl-minutes>00</span>
+          <span class="lwl-hero__countdown-label">Minutes</span>
+        </div>
+        <div class="lwl-hero__countdown-unit">
+          <span class="lwl-hero__countdown-value" data-lwl-seconds>00</span>
+          <span class="lwl-hero__countdown-label">Seconds</span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <a href="{{ section.settings.button_link }}" class="lwl-hero__cta">
+        {{ section.settings.button_label | escape }}
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (function () {
+    var countdown = document.querySelector('#LwlHero-{{ section.id }} [data-lwl-countdown]');
+    if (!countdown) return;
+
+    var target = new Date(countdown.dataset.lwlCountdown).getTime();
+    var daysEl = countdown.querySelector('[data-lwl-days]');
+    var hoursEl = countdown.querySelector('[data-lwl-hours]');
+    var minutesEl = countdown.querySelector('[data-lwl-minutes]');
+    var secondsEl = countdown.querySelector('[data-lwl-seconds]');
+
+    function pad(num) {
+      return String(num).padStart(2, '0');
+    }
+
+    function tick() {
+      var diff = target - Date.now();
+      if (isNaN(target) || diff <= 0) {
+        daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '00';
+        return;
+      }
+      var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      var minutes = Math.floor((diff / (1000 * 60)) % 60);
+      var seconds = Math.floor((diff / 1000) % 60);
+
+      daysEl.textContent = pad(days);
+      hoursEl.textContent = pad(hours);
+      minutesEl.textContent = pad(minutes);
+      secondsEl.textContent = pad(seconds);
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LWL Hero",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Leading Ladies Presents"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ladies Who Launch"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Season 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Poster image"
+    },
+    {
+      "type": "text",
+      "id": "event_datetime",
+      "label": "Event date & time (for countdown)",
+      "info": "Use a format like 2026-11-14T10:00:00+08:00",
+      "default": "2026-11-14T10:00:00+08:00"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Get Your Spot"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "LWL Hero"
+    }
+  ]
+}
+{% endschema %}

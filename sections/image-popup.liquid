@@ -1,0 +1,256 @@
+{%- style -%}
+  #ImagePopup-{{ section.id }} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: rgba(237, 58, 49, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+  }
+
+  #ImagePopup-{{ section.id }}.image-popup--visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s ease;
+  }
+
+  #ImagePopup-{{ section.id }} .image-popup__content {
+    position: relative;
+    max-width: {{ section.settings.max_width }}px;
+    width: 100%;
+    transform: scale(0.92) translateY(0.8rem);
+    transition: transform 0.25s ease;
+  }
+
+  #ImagePopup-{{ section.id }}.image-popup--visible .image-popup__content {
+    transform: scale(1) translateY(0);
+  }
+
+  #ImagePopup-{{ section.id }} .image-popup__link {
+    display: block;
+    line-height: 0;
+  }
+
+  #ImagePopup-{{ section.id }} .image-popup__image {
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: {{ section.settings.corner_radius }}px;
+    display: block;
+    animation: image-popup-bob 3s ease-in-out infinite;
+  }
+
+  @keyframes image-popup-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.6rem);
+    }
+  }
+
+  #ImagePopup-{{ section.id }} .image-popup__close {
+    position: absolute;
+    top: -1.6rem;
+    right: -1.6rem;
+    z-index: 2;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background-color: #fcc0c5;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem;
+  }
+
+  #ImagePopup-{{ section.id }} .image-popup__close svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    #ImagePopup-{{ section.id }} .image-popup__close {
+      top: -1.2rem;
+      right: 0;
+    }
+  }
+
+  #ImagePopupTrigger-{{ section.id }} {
+    position: fixed;
+    left: 0;
+    bottom: 2rem;
+    z-index: 99999;
+    background-color: #fcc0c5;
+    color: #ffffff;
+    border: none;
+    padding: 1.2rem 2rem 1.2rem 1.6rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.06rem;
+    border-radius: 0 999px 999px 0;
+    cursor: pointer;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+  }
+{%- endstyle -%}
+
+{%- if section.settings.image != blank -%}
+  <div id="ImagePopup-{{ section.id }}" class="image-popup" data-image-popup data-delay="{{ section.settings.delay_seconds | times: 1000 }}">
+    <div class="image-popup__content">
+      <button
+        type="button"
+        class="image-popup__close"
+        data-image-popup-close
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        <svg viewBox="0 0 18 17" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path
+            d="M.865 15.978a.5.5 0 00.707.707l7.433-7.431 7.579 7.282a.501.501 0 00.707-.707L9.712 8.547l7.433-7.431a.5.5 0 00-.707-.707L8.858 7.986 1.278.704a.5.5 0 10-.707.707l7.712 7.421-7.418 7.146z"
+            fill="currentColor"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </button>
+      {%- if section.settings.link != blank -%}
+        <a href="{{ section.settings.link }}" class="image-popup__link">
+      {%- endif -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1200 }}"
+            srcset="
+              {{ section.settings.image | image_url: width: 600 }} 600w,
+              {{ section.settings.image | image_url: width: 900 }} 900w,
+              {{ section.settings.image | image_url: width: 1200 }} 1200w
+            "
+            sizes="(min-width: 750px) {{ section.settings.max_width }}px, 90vw"
+            alt="{{ section.settings.image.alt | escape }}"
+            width="{{ section.settings.image.width }}"
+            height="{{ section.settings.image.height }}"
+            class="image-popup__image"
+            loading="eager"
+          >
+      {%- if section.settings.link != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <button
+    type="button"
+    id="ImagePopupTrigger-{{ section.id }}"
+    class="image-popup__trigger"
+    aria-label="Show promotion"
+  >
+    Ladies Who Launch S4!
+  </button>
+
+  <script>
+    (function () {
+      var popup = document.getElementById('ImagePopup-{{ section.id }}');
+      var trigger = document.getElementById('ImagePopupTrigger-{{ section.id }}');
+      if (!popup) return;
+
+      var delay = parseInt(popup.dataset.delay, 10) || 0;
+
+      function showPopup() {
+        popup.classList.add('image-popup--visible');
+      }
+
+      function hidePopup() {
+        popup.classList.remove('image-popup--visible');
+      }
+
+      popup.querySelectorAll('[data-image-popup-close]').forEach(function (el) {
+        el.addEventListener('click', hidePopup);
+      });
+
+      if (trigger) {
+        trigger.addEventListener('click', showPopup);
+      }
+
+      window.setTimeout(showPopup, delay);
+
+      // Browsers can restore this page from bfcache (e.g. hitting back) without
+      // re-running the script above, which would otherwise leave the popup
+      // hidden after it was closed once. Re-trigger it on that kind of restore
+      // so it reliably shows on every visit.
+      window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+          hidePopup();
+          window.setTimeout(showPopup, delay);
+        }
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Image popup",
+  "tag": "section",
+  "class": "section image-popup-section",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Popup image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link when image is clicked"
+    },
+    {
+      "type": "range",
+      "id": "delay_seconds",
+      "label": "Delay before showing",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "s",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image popup"
+    }
+  ]
+}
+{% endschema %}
