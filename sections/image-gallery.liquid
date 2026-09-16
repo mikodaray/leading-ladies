@@ -9,9 +9,72 @@ Image Gallery by Marcos Watanabe (https://marcoswatanabe.com/)
 {%- assign images_per_row_mobile = section.settings.images_per_row_mobile | default: 3 -%}
 {%- assign grid_gap = section.settings.grid_gap | default: 10 -%}
 
+{%- style -%}
+  #section-{{ section.id }} .mw-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+  }
+
+  #section-{{ section.id }} .mw-header-bar__heading {
+    margin: 0;
+  }
+
+  #section-{{ section.id }} .mw-header-bar__icons {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  #section-{{ section.id }} .mw-header-bar__icons a {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  #section-{{ section.id }} .mw-header-bar__icons svg {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+
+  #section-{{ section.id }} .mw-header-bar__icons img {
+    width: 2.8rem;
+    height: 2.8rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: #ed3a31;
+    object-fit: contain;
+  }
+{%- endstyle -%}
+
 <section class="" id="section-{{ section.id }}">
-  {%- if section.settings.heading != blank -%}
-    <div class="page-width">{{ section.settings.heading }}</div>
+  {%- if section.settings.heading != blank or section.settings.icon_image != blank or section.settings.show_cart_icon -%}
+    <div class="page-width mw-header-bar">
+      {%- if section.settings.heading != blank -%}
+        <div class="mw-header-bar__heading">{{ section.settings.heading }}</div>
+      {%- endif -%}
+      {%- if section.settings.icon_image != blank or section.settings.show_cart_icon -%}
+        <div class="mw-header-bar__icons">
+          {%- if section.settings.icon_image != blank -%}
+            <a href="{{ section.settings.icon_link | default: '#' }}" aria-label="{{ section.settings.icon_alt | default: 'Ladies Who Launch' }}">
+              <img
+                src="{{ section.settings.icon_image | image_url: width: 100 }}"
+                alt="{{ section.settings.icon_alt | default: 'Ladies Who Launch' | escape }}"
+                width="28"
+                height="28"
+                loading="lazy"
+              >
+            </a>
+          {%- endif -%}
+          {%- if section.settings.show_cart_icon -%}
+            <a href="{{ routes.cart_url }}" aria-label="Cart">
+              {{ 'icon-cart.svg' | inline_asset_content }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
   {%- endif -%}
   
   {%- if section.blocks.size > 0 -%}
@@ -287,6 +350,32 @@ Image Gallery by Marcos Watanabe (https://marcoswatanabe.com/)
       "id":"heading",
       "label":"Heading",
       "default":"<h2>Image Gallery</h2>"
+    },
+    {
+      "type": "header",
+      "content": "Header icon bar (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_icon",
+      "label": "Show cart icon",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_image",
+      "label": "Icon image"
+    },
+    {
+      "type": "url",
+      "id": "icon_link",
+      "label": "Icon link"
+    },
+    {
+      "type": "text",
+      "id": "icon_alt",
+      "label": "Icon alt text",
+      "default": "Ladies Who Launch"
     },
     {
       "type": "range",
