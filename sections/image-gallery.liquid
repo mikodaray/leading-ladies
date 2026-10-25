@@ -39,12 +39,16 @@ Image Gallery by Marcos Watanabe (https://marcoswatanabe.com/)
   }
 
   #section-{{ section.id }} .mw-header-bar__icons img {
-    width: 2.8rem;
-    height: 2.8rem;
-    padding: 0.5rem;
-    border-radius: 50%;
-    background-color: #ed3a31;
+    width: 5.6rem;
+    height: 5.6rem;
     object-fit: contain;
+  }
+
+  @media screen and (max-width: 749px) {
+    #section-{{ section.id }} .mw-header-bar__icons img {
+      width: 4.4rem;
+      height: 4.4rem;
+    }
   }
 {%- endstyle -%}
 
@@ -59,10 +63,10 @@ Image Gallery by Marcos Watanabe (https://marcoswatanabe.com/)
           {%- if section.settings.icon_image != blank -%}
             <a href="{{ section.settings.icon_link | default: '#' }}" aria-label="{{ section.settings.icon_alt | default: 'Ladies Who Launch' }}">
               <img
-                src="{{ section.settings.icon_image | image_url: width: 100 }}"
+                src="{{ section.settings.icon_image | image_url: width: 200 }}"
                 alt="{{ section.settings.icon_alt | default: 'Ladies Who Launch' | escape }}"
-                width="28"
-                height="28"
+                width="56"
+                height="56"
                 loading="lazy"
               >
             </a>
