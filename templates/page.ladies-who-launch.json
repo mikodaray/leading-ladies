@@ -12,10 +12,11 @@
       "type": "lwl-hero",
       "blocks": {
         "mosaic_1": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-2.jpg" } },
-        "mosaic_2": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-7.jpg" } },
-        "mosaic_3": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-6.jpg" } }
+        "mosaic_2": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-3.jpg" } },
+        "mosaic_3": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-7.jpg" } },
+        "mosaic_4": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-10.jpg" } }
       },
-      "block_order": ["mosaic_1", "mosaic_2", "mosaic_3"],
+      "block_order": ["mosaic_1", "mosaic_2", "mosaic_3", "mosaic_4"],
       "settings": {
         "eyebrow": "",
         "heading": "Ladies Who Launch Season 4",
