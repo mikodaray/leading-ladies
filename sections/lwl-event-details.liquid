@@ -56,7 +56,9 @@
     }
   }
 
+  /* display: block overrides the theme's `div:empty { display: none }` reset */
   #LwlEventDetails-{{ section.id }} .lwl-details__bg {
+    display: block;
     position: absolute;
     inset: 0;
     z-index: 0;
