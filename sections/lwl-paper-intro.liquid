@@ -64,6 +64,8 @@
   Playing is decided by the script right below, before the rest of the page is parsed, so there is no flash
   of unveiled content.
 {%- endcomment -%}
+<link rel="preload" as="image" type="image/webp" href="{{ 'lwl-paper-ball.webp' | asset_url }}" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="{{ 'lwl-paper-sheet.webp' | asset_url }}" fetchpriority="high">
 <div
   id="LwlPaperIntro-{{ section.id }}"
   class="lwl-paper"
@@ -138,6 +140,7 @@
     function loadImage(src, cls, w, h) {
       return new Promise(function (resolve, reject) {
         var img = new Image();
+        try { img.fetchPriority = 'high'; } catch (e) {}
         img.className = cls;
         img.alt = '';
         img.width = w;
@@ -162,7 +165,7 @@
 
     // if the ball cannot be shown quickly, skip the intro rather than keep the page covered
     var started = false;
-    var ballTimer = window.setTimeout(function () { if (!started) fadeOut(260); }, 1200);
+    var ballTimer = window.setTimeout(function () { if (!started) fadeOut(260); }, 1800);
 
     ballPromise.then(function (ball) {
       if (done || fading) return;
