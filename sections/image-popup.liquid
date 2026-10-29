@@ -241,6 +241,7 @@
     data-image-popup
     data-delay="{{ section.settings.delay_seconds | times: 1000 }}"
     data-remember-close="{{ section.settings.remember_close }}"
+    data-no-auto-open-from="{{ section.settings.no_auto_open_from | escape }}"
   >
     <div class="image-popup__content">
       <button
@@ -352,8 +353,22 @@
         } catch (e) {}
       }
 
+      // Optionally don't auto-open for visitors who just came from a given page
+      // (e.g. the landing page this popup advertises). The trigger still shows.
+      var noAutoOpenFrom = (popup.dataset.noAutoOpenFrom || '').replace(/\/+$/, '');
+
+      function cameFromSkipPage() {
+        if (!noAutoOpenFrom || !document.referrer) return false;
+        try {
+          var ref = new URL(document.referrer);
+          return ref.origin === window.location.origin && ref.pathname.replace(/\/+$/, '').slice(-noAutoOpenFrom.length) === noAutoOpenFrom;
+        } catch (e) {
+          return false;
+        }
+      }
+
       function autoShow() {
-        if (wasClosedBefore()) return;
+        if (wasClosedBefore() || cameFromSkipPage()) return;
         window.setTimeout(showPopup, delay);
       }
 
@@ -454,6 +469,12 @@
       "id": "only_on_product",
       "label": "Only show on this product (handle)",
       "info": "For product pages: leave empty to show on every product, or enter a handle such as ladies-who-launch-season-4."
+    },
+    {
+      "type": "text",
+      "id": "no_auto_open_from",
+      "label": "Don't auto-open when arriving from this page (path)",
+      "info": "For example /pages/ladies-who-launch. The button stays on screen so visitors can still open the popup."
     },
     {
       "type": "checkbox",
