@@ -241,7 +241,8 @@
     data-image-popup
     data-delay="{{ section.settings.delay_seconds | times: 1000 }}"
     data-remember-close="{{ section.settings.remember_close }}"
-    data-no-auto-open-from="{{ section.settings.no_auto_open_from | escape }}"
+    data-force-open-param="{{ section.settings.force_open_param | escape }}"
+    data-hide-param="{{ section.settings.hide_param | escape }}"
   >
     <div class="image-popup__content">
       <button
@@ -353,22 +354,26 @@
         } catch (e) {}
       }
 
-      // Optionally don't auto-open for visitors who just came from a given page
-      // (e.g. the landing page this popup advertises). The trigger still shows.
-      var noAutoOpenFrom = (popup.dataset.noAutoOpenFrom || '').replace(/\/+$/, '');
+      // Optional URL parameters (names are set in the section settings):
+      //   <hide param>=true        never auto-open; only the trigger button shows
+      //   <force-open param>=true  open it even if it was closed before
+      // With neither, it auto-opens as usual (unless it was closed before and
+      // "remember close" is on). The hide parameter wins if both are present.
+      var forceOpenParam = popup.dataset.forceOpenParam || '';
+      var hideParam = popup.dataset.hideParam || '';
 
-      function cameFromSkipPage() {
-        if (!noAutoOpenFrom || !document.referrer) return false;
+      function paramIsTrue(name) {
+        if (!name) return false;
         try {
-          var ref = new URL(document.referrer);
-          return ref.origin === window.location.origin && ref.pathname.replace(/\/+$/, '').slice(-noAutoOpenFrom.length) === noAutoOpenFrom;
+          return (new URLSearchParams(window.location.search).get(name) || '').toLowerCase() === 'true';
         } catch (e) {
           return false;
         }
       }
 
       function autoShow() {
-        if (wasClosedBefore() || cameFromSkipPage()) return;
+        if (paramIsTrue(hideParam)) return;
+        if (!paramIsTrue(forceOpenParam) && wasClosedBefore()) return;
         window.setTimeout(showPopup, delay);
       }
 
@@ -472,9 +477,15 @@
     },
     {
       "type": "text",
-      "id": "no_auto_open_from",
-      "label": "Don't auto-open when arriving from this page (path)",
-      "info": "For example /pages/ladies-who-launch. The button stays on screen so visitors can still open the popup."
+      "id": "force_open_param",
+      "label": "URL parameter that opens the popup",
+      "info": "For example lwlpopup: adding ?lwlpopup=true to the page address opens the popup, even if it was closed before."
+    },
+    {
+      "type": "text",
+      "id": "hide_param",
+      "label": "URL parameter that keeps the popup closed",
+      "info": "For example lwlpopuphide: ?lwlpopuphide=true stops it opening by itself. The button stays on screen. Wins over the parameter above."
     },
     {
       "type": "checkbox",

@@ -26,7 +26,7 @@
         "event_datetime": "2026-11-14T10:00:00+08:00",
         "primary_label": "Reserve Your Seat",
         "primary_image": "shopify://shop_images/reserveyourseat-lwl.png",
-        "primary_link": "/products/ladies-who-launch-season-4",
+        "primary_link": "/products/ladies-who-launch-season-4?lwlpopuphide=true",
         "secondary_label": "",
         "secondary_link": ""
       }
@@ -86,7 +86,7 @@
         "copy": "<p>You never know who you’ll meet, what you’ll learn, or which conversation might open your next door.</p><p>Come for the conversations. Leave with connections that could change your journey.</p><p><strong>Seats are limited.</strong></p>",
         "primary_label": "Reserve Your Seat Today! 💗",
         "primary_image": "shopify://shop_images/reserveyourseat-pink-lwl.png",
-        "primary_link": "/products/ladies-who-launch-season-4",
+        "primary_link": "/products/ladies-who-launch-season-4?lwlpopuphide=true",
         "secondary_label": "",
         "secondary_link": ""
       }
