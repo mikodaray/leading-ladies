@@ -27,6 +27,7 @@
   #LwlPaperIntro-{{ section.id }} .lwl-paper__facet {
     display: block;
     position: absolute;
+    background-color: #f3f0ea;
     background-image: url('{{ 'lwl-crumpled-paper.jpg' | asset_url }}');
     background-size: 1100px 1100px;
     backface-visibility: hidden;
@@ -45,6 +46,7 @@
   Crumpled paper "opening up" intro. Playing is decided by the script right below,
   before the rest of the page is parsed, so there is no flash of unveiled content.
 {%- endcomment -%}
+<link rel="preload" as="image" href="{{ 'lwl-crumpled-paper.jpg' | asset_url }}" fetchpriority="high">
 <div
   id="LwlPaperIntro-{{ section.id }}"
   class="lwl-paper"
@@ -77,6 +79,18 @@
     }
 
     try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
+
+    // The texture is a network image. Start downloading it now; the animation then waits for it
+    // (at most 0.4s) so the paper does not appear to change as it loads.
+    var tex = new Image();
+    tex.src = '{{ 'lwl-crumpled-paper.jpg' | asset_url }}';
+    var all = [];
+    var started = false;
+    function start() {
+      if (started) return;
+      started = true;
+      all.forEach(function (a) { try { a.play(); } catch (e) {} });
+    }
 
     var done = false;
     function cleanup() {
@@ -181,21 +195,30 @@
                  'rotate3d(' + ax.toFixed(2) + ',' + ay.toFixed(2) + ',0,' + deg.toFixed(1) + 'deg) scale(' + s0.toFixed(2) + ')';
       var to = 'translate3d(0,0,0) rotate3d(' + ax.toFixed(2) + ',' + ay.toFixed(2) + ',0,0deg) scale(1)';
 
-      shade.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, delay: 250, easing: 'ease-out', fill: 'both' });
+      all.push(shade.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, delay: 250, easing: 'ease-out', fill: 'both' }));
 
-      facetAnims.push(el.animate(
+      var facetAnim = el.animate(
         [
           { transform: from, filter: 'brightness(' + b0.toFixed(2) + ')' },
           { transform: to, filter: 'brightness(1)' }
         ],
         { duration: 1000, delay: 100 + rnd() * 300, easing: 'cubic-bezier(0.16, 0.84, 0.3, 1)', fill: 'both' }
-      ));
+      );
+      facetAnims.push(facetAnim);
+      all.push(facetAnim);
     });
 
-    root.animate(
+    all.push(root.animate(
       [{ backgroundColor: '{{ section.settings.gap_color }}' }, { backgroundColor: '#efece6' }],
       { duration: 450, delay: 560, easing: 'ease-in', fill: 'both' }
-    );
+    ));
+
+    // hold the crumpled ball on screen (every animation paused at its first frame) until the texture is ready
+    all.forEach(function (a) { a.pause(); });
+    tex.onload = start;
+    tex.onerror = start;
+    if (tex.complete) start();
+    else window.setTimeout(start, 400);
 
     var fading = false;
     function fadeOut(ms) {
