@@ -1,5 +1,12 @@
 {
   "sections": {
+    "lwl_paper_intro": {
+      "type": "lwl-paper-intro",
+      "settings": {
+        "once_per_session": true,
+        "gap_color": "#3b322d"
+      }
+    },
     "main": {
       "type": "main-page",
       "disabled": true,
@@ -98,6 +105,7 @@
     }
   },
   "order": [
+    "lwl_paper_intro",
     "main",
     "lwl_hero",
     "lwl_intro",

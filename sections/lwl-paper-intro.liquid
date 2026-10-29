@@ -1,0 +1,253 @@
+{%- style -%}
+  /* the overlay is fixed-position, so keep this wrapper and its neighbour from adding page spacing */
+  #shopify-section-{{ section.id }},
+  #shopify-section-{{ section.id }} + .shopify-section {
+    margin-top: 0;
+  }
+
+  /* hidden until the script decides to play (also keeps it off when JavaScript is unavailable).
+     The id selector outranks the theme's `div:empty { display: none }` reset. */
+  #LwlPaperIntro-{{ section.id }} {
+    display: none;
+  }
+
+  #LwlPaperIntro-{{ section.id }}.lwl-paper--on {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+    overflow: hidden;
+    contain: layout paint;
+    background-color: {{ section.settings.gap_color }};
+    perspective: 1400px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #LwlPaperIntro-{{ section.id }} .lwl-paper__facet {
+    display: block;
+    position: absolute;
+    background-image: url('{{ 'lwl-crumpled-paper.jpg' | asset_url }}');
+    background-size: 1100px 1100px;
+    backface-visibility: hidden;
+    will-change: transform, filter;
+  }
+
+  #LwlPaperIntro-{{ section.id }} .lwl-paper__shade {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+{%- endstyle -%}
+
+{%- comment -%}
+  Crumpled paper "opening up" intro. Playing is decided by the script right below,
+  before the rest of the page is parsed, so there is no flash of unveiled content.
+{%- endcomment -%}
+<div
+  id="LwlPaperIntro-{{ section.id }}"
+  class="lwl-paper"
+  aria-hidden="true"
+  data-once="{{ section.settings.once_per_session }}"
+></div>
+
+<script>
+  (function () {
+    var root = document.getElementById('LwlPaperIntro-{{ section.id }}');
+    if (!root) return;
+
+    var KEY = 'lwlPaperIntro';
+    var params;
+    try { params = new URLSearchParams(window.location.search); } catch (e) { params = null; }
+    var forced = !!params && params.get('lwlpaper') === '1'; // ?lwlpaper=1 replays it for previews
+
+    var seen = false;
+    try { seen = window.sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+
+    var skipIt =
+      !root.animate ||
+      (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ||
+      (window.Shopify && window.Shopify.designMode) ||
+      (root.dataset.once === 'true' && seen && !forced);
+
+    if (skipIt) {
+      if (root.parentNode) root.parentNode.removeChild(root);
+      return;
+    }
+
+    try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
+
+    var done = false;
+    function cleanup() {
+      if (done) return;
+      done = true;
+      if (root.parentNode) root.parentNode.removeChild(root);
+    }
+    // whatever happens, never leave the page covered
+    window.setTimeout(cleanup, 7000);
+
+    var W = window.innerWidth;
+    var H = window.innerHeight;
+    root.classList.add('lwl-paper--on');
+
+    // keep the page from scrolling underneath without hiding the scrollbar (which would shift the layout)
+    function stopScroll(e) { e.preventDefault(); }
+    root.addEventListener('wheel', stopScroll, { passive: false });
+    root.addEventListener('touchmove', stopScroll, { passive: false });
+
+    // small seeded random generator: the same crumple every time
+    var seed = 20261114;
+    function rnd() {
+      seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+
+    // jittered grid of points, every cell split into two triangles = the paper's facets
+    var cell = W < 750 ? 120 : 170;
+    var cols = Math.max(3, Math.round(W / cell));
+    var rows = Math.max(3, Math.round(H / cell));
+    var cw = W / cols;
+    var ch = H / rows;
+    var pts = [];
+    for (var j = 0; j <= rows; j++) {
+      pts[j] = [];
+      for (var i = 0; i <= cols; i++) {
+        var x = i * cw;
+        var y = j * ch;
+        if (i > 0 && i < cols) x += (rnd() - 0.5) * cw * 0.5;
+        if (j > 0 && j < rows) y += (rnd() - 0.5) * ch * 0.5;
+        pts[j][i] = [x, y];
+      }
+    }
+
+    var tris = [];
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var tl = pts[r][c], tr = pts[r][c + 1], bl = pts[r + 1][c], br = pts[r + 1][c + 1];
+        if (rnd() < 0.5) { tris.push([tl, tr, br]); tris.push([tl, br, bl]); }
+        else { tris.push([tl, tr, bl]); tris.push([tr, br, bl]); }
+      }
+    }
+
+    var cx = W / 2;
+    var cy = H / 2;
+    var pull = 0.66; // how far the facets start pulled in towards the middle: the "ball"
+    var facetAnims = [];
+
+    tris.forEach(function (t) {
+      var mx = (t[0][0] + t[1][0] + t[2][0]) / 3;
+      var my = (t[0][1] + t[1][1] + t[2][1]) / 3;
+      // nudge each corner outwards by 1px so neighbouring facets overlap and no hairline seams show
+      var grown = t.map(function (p) {
+        var dx = p[0] - mx, dy = p[1] - my, d = Math.sqrt(dx * dx + dy * dy) || 1;
+        return [p[0] + (dx / d) * 1.5, p[1] + (dy / d) * 1.5];
+      });
+      var minX = Math.floor(Math.min(grown[0][0], grown[1][0], grown[2][0]));
+      var minY = Math.floor(Math.min(grown[0][1], grown[1][1], grown[2][1]));
+      var maxX = Math.ceil(Math.max(grown[0][0], grown[1][0], grown[2][0]));
+      var maxY = Math.ceil(Math.max(grown[0][1], grown[1][1], grown[2][1]));
+
+      var el = document.createElement('i');
+      el.className = 'lwl-paper__facet';
+      el.style.left = minX + 'px';
+      el.style.top = minY + 'px';
+      el.style.width = (maxX - minX) + 'px';
+      el.style.height = (maxY - minY) + 'px';
+      el.style.backgroundPosition = (-minX) + 'px ' + (-minY) + 'px';
+      el.style.clipPath = 'polygon(' + grown.map(function (p) {
+        return (p[0] - minX).toFixed(1) + 'px ' + (p[1] - minY).toFixed(1) + 'px';
+      }).join(',') + ')';
+      el.style.transformOrigin = (mx - minX).toFixed(1) + 'px ' + (my - minY).toFixed(1) + 'px';
+      var shade = document.createElement('b');
+      shade.className = 'lwl-paper__shade';
+      var ang = Math.round(rnd() * 360);
+      var dark = (0.22 + rnd() * 0.26).toFixed(2);
+      shade.style.background = 'linear-gradient(' + ang + 'deg, rgba(40,30,22,' + dark + ') 0%, rgba(40,30,22,0) 55%, rgba(255,255,255,0.22) 100%)';
+      el.appendChild(shade);
+      root.appendChild(el);
+
+      // start: pulled towards the centre, tipped in 3D, shrunk and shaded; end: flat in place
+      var tx = (cx - mx) * pull + (rnd() - 0.5) * 60;
+      var ty = (cy - my) * pull + (rnd() - 0.5) * 60;
+      var tz = -(30 + rnd() * 260);
+      var ax = rnd() * 2 - 1, ay = rnd() * 2 - 1;
+      var deg = 22 + rnd() * 40;
+      var s0 = 0.84 + rnd() * 0.2;
+      var b0 = 0.66 + rnd() * 0.36;
+      var from = 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,' + tz.toFixed(1) + 'px) ' +
+                 'rotate3d(' + ax.toFixed(2) + ',' + ay.toFixed(2) + ',0,' + deg.toFixed(1) + 'deg) scale(' + s0.toFixed(2) + ')';
+      var to = 'translate3d(0,0,0) rotate3d(' + ax.toFixed(2) + ',' + ay.toFixed(2) + ',0,0deg) scale(1)';
+
+      shade.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, delay: 250, easing: 'ease-out', fill: 'both' });
+
+      facetAnims.push(el.animate(
+        [
+          { transform: from, filter: 'brightness(' + b0.toFixed(2) + ')' },
+          { transform: to, filter: 'brightness(1)' }
+        ],
+        { duration: 1000, delay: 100 + rnd() * 300, easing: 'cubic-bezier(0.16, 0.84, 0.3, 1)', fill: 'both' }
+      ));
+    });
+
+    root.animate(
+      [{ backgroundColor: '{{ section.settings.gap_color }}' }, { backgroundColor: '#efece6' }],
+      { duration: 450, delay: 560, easing: 'ease-in', fill: 'both' }
+    );
+
+    var fading = false;
+    function fadeOut(ms) {
+      if (fading) return;
+      fading = true;
+      var fade = root.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: 'ease', fill: 'forwards' });
+      fade.onfinish = cleanup;
+      fade.oncancel = cleanup;
+    }
+
+    // tap, click or Escape skips the intro
+    root.addEventListener('click', function () { fadeOut(220); });
+    window.addEventListener('keydown', function (e) { if (e.key === 'Escape') fadeOut(220); });
+
+    // once the paper is flat, wait a moment (at most 1s) for the page to finish loading, then fade it away
+    Promise.all(facetAnims.map(function (a) { return a.finished; })).then(function () {
+      if (fading) return;
+      var waited = 0;
+      (function check() {
+        if (document.readyState === 'complete' || waited >= 600) { fadeOut(400); return; }
+        waited += 100;
+        window.setTimeout(check, 100);
+      })();
+    }).catch(function () {});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LWL Paper Intro",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "once_per_session",
+      "label": "Play once per visit",
+      "info": "When on, it plays the first time someone opens the page and not again until they return later. Add ?lwlpaper=1 to the page address to preview it any time. It is skipped for people who prefer reduced motion and inside the theme editor.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "gap_color",
+      "label": "Color seen between the folds",
+      "default": "#3b322d"
+    }
+  ],
+  "presets": [
+    { "name": "LWL Paper Intro" }
+  ]
+}
+{% endschema %}
