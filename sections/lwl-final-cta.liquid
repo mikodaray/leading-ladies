@@ -85,6 +85,57 @@
     transform: translateY(-0.3rem);
   }
 
+  /* optional cutout on the right of the body content, standing on the section's bottom edge */
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__inner--with-image {
+    max-width: 104rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 36rem);
+    gap: 4rem;
+    align-items: center;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__text {
+    min-width: 0;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__side {
+    align-self: end;
+    /* cancel the section's 8rem bottom padding, plus 2rem so the tilt never lifts the cut edge into view */
+    margin-bottom: -10rem;
+    line-height: 0;
+  }
+
+  #LwlFinalCta-{{ section.id }} .lwl-final-cta__side-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform-origin: 50% 100%;
+    filter: drop-shadow(0 1.2rem 1.6rem rgba(0, 0, 0, 0.35));
+    animation: lwl-final-wobble 4.4s ease-in-out infinite;
+  }
+
+  @keyframes lwl-final-wobble {
+    0%,
+    100% {
+      transform: rotate(-2.2deg);
+    }
+    50% {
+      transform: rotate(2.2deg);
+    }
+  }
+
+  @media screen and (max-width: 899px) {
+    #LwlFinalCta-{{ section.id }} .lwl-final-cta__inner--with-image {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    #LwlFinalCta-{{ section.id }} .lwl-final-cta__side {
+      width: min(30rem, 80%);
+      margin: 0 auto -10rem;
+    }
+  }
+
   /* image button: a pink pill that pulses to show it is clickable */
   #LwlFinalCta-{{ section.id }} .lwl-final-cta__button-image {
     display: block;
@@ -154,6 +205,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    #LwlFinalCta-{{ section.id }} .lwl-final-cta__side-img,
     #LwlFinalCta-{{ section.id }} .lwl-final-cta__button-image,
     #LwlFinalCta-{{ section.id }} .lwl-final-cta__button-image img {
       animation: none;
@@ -168,7 +220,8 @@
       <img src="{{ section.settings.background_image | image_url: width: 1800 }}" alt="" loading="lazy">
     </div>
   {%- endif -%}
-  <div class="lwl-final-cta__inner">
+  <div class="lwl-final-cta__inner{% if section.settings.side_image != blank %} lwl-final-cta__inner--with-image{% endif %}">
+    <div class="lwl-final-cta__text">
     {%- if section.settings.heading != blank -%}
       <h2 class="lwl-final-cta__heading">{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
@@ -199,6 +252,21 @@
         </a>
       {%- endif -%}
     </div>
+    </div>
+    {%- if section.settings.side_image != blank -%}
+      <div class="lwl-final-cta__side">
+        <img
+          src="{{ section.settings.side_image | image_url: width: 700 }}"
+          srcset="{{ section.settings.side_image | image_url: width: 500 }} 500w, {{ section.settings.side_image | image_url: width: 700 }} 700w, {{ section.settings.side_image | image_url: width: 1000 }} 1000w"
+          sizes="(min-width: 900px) 36rem, 80vw"
+          alt=""
+          width="1024"
+          height="1024"
+          class="lwl-final-cta__side-img"
+          loading="lazy"
+        >
+      </div>
+    {%- endif -%}
   </div>
 </div>
 
@@ -254,6 +322,7 @@
   },
   "settings": [
     { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "image_picker", "id": "side_image", "label": "Cutout image on the right", "info": "A transparent PNG shown to the right of the text. It stands on the bottom edge and wobbles gently." },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Your Next Connection Could Change Everything" },
     { "type": "richtext", "id": "copy", "label": "Copy" },
     { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Register Now", "info": "Used as the text button, and as the image's accessible name." },
