@@ -66,10 +66,10 @@
     "lwl_details": {
       "type": "lwl-event-details",
       "blocks": {
-        "detail_1": { "type": "detail", "settings": { "icon": "📅", "label": "Date", "value": "November 14, 2026 | Saturday" } },
-        "detail_2": { "type": "detail", "settings": { "icon": "⏰", "label": "Time", "value": "10:00 AM – 4:00 PM" } },
-        "detail_3": { "type": "detail", "settings": { "icon": "📍", "label": "Location", "value": "Greyhound Café, Ayala Triangle Gardens, Makati City" } },
-        "detail_4": { "type": "detail", "settings": { "icon": "🎟️", "label": "Ticket Price", "value": "₱4,999" } }
+        "detail_1": { "type": "detail", "settings": { "image": "shopify://shop_images/calendar-lwl.png", "label": "Date", "value": "November 14, 2026 | Saturday" } },
+        "detail_2": { "type": "detail", "settings": { "image": "shopify://shop_images/time-lwl.png", "label": "Time", "value": "10:00 AM – 4:00 PM" } },
+        "detail_3": { "type": "detail", "settings": { "image": "shopify://shop_images/greyhounds-entrance.jpg", "label": "Location", "value": "Greyhound Café, Ayala Triangle Gardens, Makati City" } },
+        "detail_4": { "type": "detail", "settings": { "image": "shopify://shop_images/ticket-lwl.png", "label": "Ticket Price", "value": "₱4,999" } }
       },
       "block_order": ["detail_1", "detail_2", "detail_3", "detail_4"],
       "settings": {

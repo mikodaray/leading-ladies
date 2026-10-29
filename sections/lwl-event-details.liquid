@@ -20,31 +20,79 @@
     gap: 2.4rem;
   }
 
+  /* --f is the "focused" amount: 0 at rest, 1 on hover / keyboard focus / tap */
   #LwlEventDetails-{{ section.id }} .lwl-details__card {
-    background: #ffffff;
+    --f: 0;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    min-height: 30rem;
     border-radius: 1.6rem;
-    padding: 3.2rem 2.4rem;
-    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.15);
+    background-color: #8f1f19;
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    outline: none;
     opacity: 0;
-    transform: translateY(2.4rem);
-    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+    transform: translateY(3rem) scale(0.96);
+    transition: opacity 0.7s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
   }
 
   #LwlEventDetails-{{ section.id }} .lwl-details__card.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(calc(var(--f) * -0.6rem));
+    box-shadow: 0 calc(1rem + var(--f) * 0.8rem) calc(2.5rem + var(--f) * 1.5rem) rgba(0, 0, 0, calc(0.2 + var(--f) * 0.15));
   }
 
-  #LwlEventDetails-{{ section.id }} .lwl-details__card.is-visible:hover {
-    box-shadow: 0 1.6rem 3.5rem rgba(0, 0, 0, 0.25);
-    transform: translateY(-0.5rem);
+  #LwlEventDetails-{{ section.id }} .lwl-details__card.is-active,
+  #LwlEventDetails-{{ section.id }} .lwl-details__card:focus-visible {
+    --f: 1;
   }
 
-  #LwlEventDetails-{{ section.id }} .lwl-details__icon {
-    display: block;
-    font-size: 4rem;
-    line-height: 1;
-    margin: 0 0 1.4rem;
+  @media (hover: hover) and (pointer: fine) {
+    #LwlEventDetails-{{ section.id }} .lwl-details__card:hover {
+      --f: 1;
+    }
+  }
+
+  #LwlEventDetails-{{ section.id }} .lwl-details__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(calc(1 + var(--f) * 0.1));
+    transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* light wash at rest: the photo stays apparent, the bottom is darker for the text */
+  #LwlEventDetails-{{ section.id }} .lwl-details__card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(237, 58, 49, 0.06) 0%, rgba(140, 24, 18, 0.12) 36%, rgba(110, 18, 14, 0.8) 62%, rgba(95, 14, 10, 0.93) 100%);
+  }
+
+  /* strong red wash that fades in on hover / focus / tap */
+  #LwlEventDetails-{{ section.id }} .lwl-details__card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(180deg, rgba(237, 58, 49, 0.84) 0%, rgba(237, 58, 49, 0.94) 100%);
+    opacity: var(--f);
+    transition: opacity 0.5s ease;
+  }
+
+  #LwlEventDetails-{{ section.id }} .lwl-details__content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding: 2.4rem 2rem 2.8rem;
+    transform: translateY(calc(var(--f) * -0.4rem));
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   #LwlEventDetails-{{ section.id }} .lwl-details__label {
@@ -52,22 +100,36 @@
     font-weight: 600;
     letter-spacing: 0.25rem;
     text-transform: uppercase;
-    color: #ed3a31;
+    color: #fcc0c5;
     margin: 0 0 0.8rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   }
 
   #LwlEventDetails-{{ section.id }} .lwl-details__value {
     font-size: 2.1rem;
     line-height: 1.35;
-    color: #121212;
+    color: #ffffff;
     margin: 0;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  @media screen and (max-width: 749px) {
+    #LwlEventDetails-{{ section.id }} .lwl-details__card {
+      min-height: 24rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
+    #LwlEventDetails-{{ section.id }} .lwl-details__card,
+    #LwlEventDetails-{{ section.id }} .lwl-details__bg,
+    #LwlEventDetails-{{ section.id }} .lwl-details__card::after,
+    #LwlEventDetails-{{ section.id }} .lwl-details__content {
+      transition: none;
+    }
+
     #LwlEventDetails-{{ section.id }} .lwl-details__card {
       opacity: 1;
       transform: none;
-      transition: none;
     }
   }
 {%- endstyle -%}
@@ -78,16 +140,18 @@
   {%- endif -%}
   <div class="lwl-details__grid">
     {%- for block in section.blocks -%}
-      <div class="lwl-details__card" data-lwl-reveal {{ block.shopify_attributes }}>
-        {%- if block.settings.icon != blank -%}
-          <span class="lwl-details__icon" aria-hidden="true">{{ block.settings.icon | escape }}</span>
+      <div class="lwl-details__card" data-lwl-reveal tabindex="0" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <div class="lwl-details__bg" style="background-image: url('{{ block.settings.image | image_url: width: 900 }}');"></div>
         {%- endif -%}
-        {%- if block.settings.label != blank -%}
-          <h3 class="lwl-details__label">{{ block.settings.label | escape }}</h3>
-        {%- endif -%}
-        {%- if block.settings.value != blank -%}
-          <p class="lwl-details__value">{{ block.settings.value | escape | replace: ' | ', '<br>' }}</p>
-        {%- endif -%}
+        <div class="lwl-details__content">
+          {%- if block.settings.label != blank -%}
+            <h3 class="lwl-details__label">{{ block.settings.label | escape }}</h3>
+          {%- endif -%}
+          {%- if block.settings.value != blank -%}
+            <p class="lwl-details__value">{{ block.settings.value | escape | replace: ' | ', '<br>' }}</p>
+          {%- endif -%}
+        </div>
       </div>
     {%- endfor -%}
   </div>
@@ -95,21 +159,38 @@
 
 <script>
   (function () {
-    var cards = document.querySelectorAll('#LwlEventDetails-{{ section.id }} [data-lwl-reveal]');
+    var root = document.getElementById('LwlEventDetails-{{ section.id }}');
+    if (!root) return;
+    var cards = root.querySelectorAll('[data-lwl-reveal]');
     if (!cards.length) return;
+
     if (!('IntersectionObserver' in window)) {
       cards.forEach(function (c) { c.classList.add('is-visible'); });
-      return;
+    } else {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry, i) {
+          if (entry.isIntersecting) {
+            setTimeout(function () { entry.target.classList.add('is-visible'); }, i * 110);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      cards.forEach(function (c) { observer.observe(c); });
     }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry, i) {
-        if (entry.isIntersecting) {
-          setTimeout(function () { entry.target.classList.add('is-visible'); }, i * 90);
-          observer.unobserve(entry.target);
-        }
+
+    // tap / click toggles the focused look (touch screens have no hover)
+    cards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        var wasActive = card.classList.contains('is-active');
+        cards.forEach(function (c) { c.classList.remove('is-active'); });
+        if (!wasActive) card.classList.add('is-active');
       });
-    }, { threshold: 0.15 });
-    cards.forEach(function (c) { observer.observe(c); });
+    });
+    document.addEventListener('click', function (e) {
+      if (!root.contains(e.target)) {
+        cards.forEach(function (c) { c.classList.remove('is-active'); });
+      }
+    });
   })();
 </script>
 
@@ -129,7 +210,7 @@
       "type": "detail",
       "name": "Detail",
       "settings": [
-        { "type": "text", "id": "icon", "label": "Icon (emoji)" },
+        { "type": "image_picker", "id": "image", "label": "Background image" },
         { "type": "text", "id": "label", "label": "Label" },
         { "type": "text", "id": "value", "label": "Value", "info": "Use \" | \" to start a new line." }
       ]
@@ -139,10 +220,10 @@
     {
       "name": "LWL Event Details",
       "blocks": [
-        { "type": "detail", "settings": { "icon": "📅", "label": "Date", "value": "November 14, 2026 | Saturday" } },
-        { "type": "detail", "settings": { "icon": "⏰", "label": "Time", "value": "10:00 AM – 4:00 PM" } },
-        { "type": "detail", "settings": { "icon": "📍", "label": "Location", "value": "Greyhound Café, Ayala Triangle Gardens, Makati City" } },
-        { "type": "detail", "settings": { "icon": "🎟️", "label": "Ticket Price", "value": "₱4,999" } }
+        { "type": "detail", "settings": { "label": "Date", "value": "November 14, 2026 | Saturday" } },
+        { "type": "detail", "settings": { "label": "Time", "value": "10:00 AM – 4:00 PM" } },
+        { "type": "detail", "settings": { "label": "Location", "value": "Greyhound Café, Ayala Triangle Gardens, Makati City" } },
+        { "type": "detail", "settings": { "label": "Ticket Price", "value": "₱4,999" } }
       ]
     }
   ]
