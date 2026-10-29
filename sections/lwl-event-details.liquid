@@ -6,6 +6,13 @@
     text-align: center;
   }
 
+  /* crumpled paper: a seamless texture in the section's own red (theme asset), in place of the flat colour */
+  #LwlEventDetails-{{ section.id }}.lwl-details--paper {
+    background-color: #ed3a31;
+    background-image: url('{{ 'lwl-crumpled-paper-red.jpg' | asset_url }}');
+    background-size: 1100px 1100px;
+  }
+
   #LwlEventDetails-{{ section.id }} .lwl-details__heading {
     font-size: clamp(2.8rem, 4.5vw, 4rem);
     color: #ffffff;
@@ -136,7 +143,7 @@
   }
 {%- endstyle -%}
 
-<div id="LwlEventDetails-{{ section.id }}" class="lwl-details">
+<div id="LwlEventDetails-{{ section.id }}" class="lwl-details{% if section.settings.paper_texture %} lwl-details--paper{% endif %}">
   {%- if section.settings.heading != blank -%}
     <h2 class="lwl-details__heading">{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
@@ -205,6 +212,7 @@
     "templates": ["page"]
   },
   "settings": [
+    { "type": "checkbox", "id": "paper_texture", "label": "Crumpled paper background", "info": "Replaces the flat red with a crumpled paper texture.", "default": false },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Event Details" }
   ],
   "blocks": [

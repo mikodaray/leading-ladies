@@ -63,6 +63,7 @@
       },
       "block_order": ["feature_1", "feature_2", "feature_3", "feature_4", "feature_5", "feature_6"],
       "settings": {
+        "paper_texture": true,
         "heading": "What’s Included in Your Ticket?"
       }
     },
@@ -87,6 +88,7 @@
       },
       "block_order": ["detail_1", "detail_2", "detail_3", "detail_4"],
       "settings": {
+        "paper_texture": true,
         "heading": "Event Details"
       }
     },

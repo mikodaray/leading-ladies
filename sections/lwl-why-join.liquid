@@ -6,6 +6,13 @@
     text-align: center;
   }
 
+  /* crumpled paper: a seamless texture in the section's own pink (theme asset), in place of the flat colour */
+  #LwlWhyJoin-{{ section.id }}.lwl-why--paper {
+    background-color: #fff5f5;
+    background-image: url('{{ 'lwl-crumpled-paper-pink.jpg' | asset_url }}');
+    background-size: 1100px 1100px;
+  }
+
   #LwlWhyJoin-{{ section.id }} .lwl-why__heading {
     font-size: clamp(2.8rem, 4.5vw, 4rem);
     color: #ed3a31;
@@ -119,7 +126,7 @@
   }
 {%- endstyle -%}
 
-<div id="LwlWhyJoin-{{ section.id }}" class="lwl-why">
+<div id="LwlWhyJoin-{{ section.id }}" class="lwl-why{% if section.settings.paper_texture %} lwl-why--paper{% endif %}">
   {%- if section.settings.heading != blank -%}
     <h2 class="lwl-why__heading">{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
@@ -183,6 +190,7 @@
     "templates": ["page"]
   },
   "settings": [
+    { "type": "checkbox", "id": "paper_texture", "label": "Crumpled paper background", "info": "Replaces the flat pink with a crumpled paper texture.", "default": false },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Why Join Ladies Who Launch Season 4?" }
   ],
   "blocks": [
