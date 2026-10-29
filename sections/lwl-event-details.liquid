@@ -86,7 +86,7 @@
           <h3 class="lwl-details__label">{{ block.settings.label | escape }}</h3>
         {%- endif -%}
         {%- if block.settings.value != blank -%}
-          <p class="lwl-details__value">{{ block.settings.value | escape }}</p>
+          <p class="lwl-details__value">{{ block.settings.value | escape | replace: ' | ', '<br>' }}</p>
         {%- endif -%}
       </div>
     {%- endfor -%}
@@ -131,7 +131,7 @@
       "settings": [
         { "type": "text", "id": "icon", "label": "Icon (emoji)" },
         { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "value", "label": "Value" }
+        { "type": "text", "id": "value", "label": "Value", "info": "Use \" | \" to start a new line." }
       ]
     }
   ],

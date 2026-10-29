@@ -13,7 +13,7 @@
       "blocks": {
         "mosaic_1": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-1.jpg" } },
         "mosaic_2": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-2.jpg" } },
-        "mosaic_3": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-4.jpg" } },
+        "mosaic_3": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-6.jpg" } },
         "mosaic_4": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-8.jpg" } }
       },
       "block_order": ["mosaic_1", "mosaic_2", "mosaic_3", "mosaic_4"],
@@ -34,7 +34,7 @@
       "type": "lwl-about",
       "settings": {
         "image_1": "shopify://shop_images/eventpics-5.jpg",
-        "image_2": "shopify://shop_images/eventpics-7.jpg",
+        "image_2": "shopify://shop_images/eventpics-3.jpg",
         "image_right": false,
         "heading": "",
         "copy": "<p>Now in its fourth season, Ladies Who Launch brings together 100 women who are building businesses, pursuing big ideas, navigating careers, and figuring things out along the way.</p><p>Whether you’re an entrepreneur, founder, creative, professional, or simply ready for your next chapter, there’s a seat for you.</p><p><strong>This isn’t your typical networking event.</strong></p><p>Expect honest conversations, inspiring stories, practical business lessons, and opportunities to connect with women you might never have met otherwise.</p><p>Because sometimes, being in the right room changes everything.</p>"
@@ -59,7 +59,7 @@
       "type": "lwl-about",
       "settings": {
         "image_1": "shopify://shop_images/eventpics-10.jpg",
-        "image_2": "shopify://shop_images/eventpics-6.jpg",
+        "image_2": "shopify://shop_images/eventpics-4.jpg",
         "image_right": true,
         "heading": "Coming Alone? You’re Not the Only One!",
         "copy": "<p>You don’t need to bring a friend to belong in this room.</p><p>Some of the best connections begin when you show up somewhere new, introduce yourself, and discover how much you have in common with the women around you.</p><p>Come as you are. We’ll help make the introductions easier. ❤️</p>"
