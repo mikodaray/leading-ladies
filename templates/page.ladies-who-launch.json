@@ -4,7 +4,8 @@
       "type": "lwl-paper-intro",
       "settings": {
         "once_per_session": true,
-        "gap_color": "#3b322d"
+        "cover_page": true,
+        "backdrop_color": "#fcc0c5"
       }
     },
     "main": {

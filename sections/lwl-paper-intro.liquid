@@ -18,40 +18,58 @@
     z-index: 99998;
     overflow: hidden;
     contain: layout paint;
-    background-color: {{ section.settings.gap_color }};
-    perspective: 1400px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
 
-  #LwlPaperIntro-{{ section.id }} .lwl-paper__facet {
-    display: block;
-    position: absolute;
-    background-color: #f3f0ea;
-    background-image: url('{{ 'lwl-crumpled-paper.jpg' | asset_url }}');
-    background-size: 1100px 1100px;
-    backface-visibility: hidden;
-    will-change: transform, filter;
-  }
-
-  #LwlPaperIntro-{{ section.id }} .lwl-paper__shade {
+  /* display: block overrides the theme's `div:empty { display: none }` reset, which would hide this empty div */
+  #LwlPaperIntro-{{ section.id }} .lwl-paper__backdrop {
     display: block;
     position: absolute;
     inset: 0;
+    background: {{ section.settings.backdrop_color }};
+  }
+
+  #LwlPaperIntro-{{ section.id }} .lwl-paper__ball,
+  #LwlPaperIntro-{{ section.id }} .lwl-paper__sheet {
+    display: block;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    max-width: none;
+    opacity: 0;
     pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform, opacity;
+  }
+
+  #LwlPaperIntro-{{ section.id }} .lwl-paper__ball {
+    width: auto;
+    height: clamp(170px, 32vh, 360px);
+  }
+
+  /* the torn sheet: sized by height on wide screens and by width on phones. The zoom aims at the middle of the tear. */
+  #LwlPaperIntro-{{ section.id }} .lwl-paper__sheet {
+    width: min(94vw, calc(92vh * 0.762));
+    height: auto;
+    transform-origin: 46% 51%;
   }
 {%- endstyle -%}
 
 {%- comment -%}
-  Crumpled paper "opening up" intro. Playing is decided by the script right below,
-  before the rest of the page is parsed, so there is no flash of unveiled content.
+  Crumpled paper intro. A paper ball pops onto a coloured backdrop, rocks for a moment, then opens into a torn
+  sheet through which the live page shows; the sheet zooms away to reveal the page. The artwork is a keyed
+  (green-screen removed) ball and sheet, theme assets lwl-paper-ball.webp and lwl-paper-sheet.webp.
+  Playing is decided by the script right below, before the rest of the page is parsed, so there is no flash
+  of unveiled content.
 {%- endcomment -%}
-<link rel="preload" as="image" href="{{ 'lwl-crumpled-paper.jpg' | asset_url }}" fetchpriority="high">
 <div
   id="LwlPaperIntro-{{ section.id }}"
   class="lwl-paper"
   aria-hidden="true"
   data-once="{{ section.settings.once_per_session }}"
+  data-cover="{{ section.settings.cover_page }}"
 ></div>
 
 <script>
@@ -80,18 +98,6 @@
 
     try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
 
-    // The texture is a network image. Start downloading it now; the animation then waits for it
-    // (at most 0.4s) so the paper does not appear to change as it loads.
-    var tex = new Image();
-    tex.src = '{{ 'lwl-crumpled-paper.jpg' | asset_url }}';
-    var all = [];
-    var started = false;
-    function start() {
-      if (started) return;
-      started = true;
-      all.forEach(function (a) { try { a.play(); } catch (e) {} });
-    }
-
     var done = false;
     function cleanup() {
       if (done) return;
@@ -101,8 +107,6 @@
     // whatever happens, never leave the page covered
     window.setTimeout(cleanup, 7000);
 
-    var W = window.innerWidth;
-    var H = window.innerHeight;
     root.classList.add('lwl-paper--on');
 
     // keep the page from scrolling underneath without hiding the scrollbar (which would shift the layout)
@@ -110,115 +114,13 @@
     root.addEventListener('wheel', stopScroll, { passive: false });
     root.addEventListener('touchmove', stopScroll, { passive: false });
 
-    // small seeded random generator: the same crumple every time
-    var seed = 20261114;
-    function rnd() {
-      seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
-      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    // the backdrop hides the page (which may still be loading) until the sheet opens; it can be switched off
+    var backdrop = null;
+    if (root.dataset.cover !== 'false') {
+      backdrop = document.createElement('div');
+      backdrop.className = 'lwl-paper__backdrop';
+      root.appendChild(backdrop);
     }
-
-    // jittered grid of points, every cell split into two triangles = the paper's facets
-    var cell = W < 750 ? 120 : 170;
-    var cols = Math.max(3, Math.round(W / cell));
-    var rows = Math.max(3, Math.round(H / cell));
-    var cw = W / cols;
-    var ch = H / rows;
-    var pts = [];
-    for (var j = 0; j <= rows; j++) {
-      pts[j] = [];
-      for (var i = 0; i <= cols; i++) {
-        var x = i * cw;
-        var y = j * ch;
-        if (i > 0 && i < cols) x += (rnd() - 0.5) * cw * 0.5;
-        if (j > 0 && j < rows) y += (rnd() - 0.5) * ch * 0.5;
-        pts[j][i] = [x, y];
-      }
-    }
-
-    var tris = [];
-    for (var r = 0; r < rows; r++) {
-      for (var c = 0; c < cols; c++) {
-        var tl = pts[r][c], tr = pts[r][c + 1], bl = pts[r + 1][c], br = pts[r + 1][c + 1];
-        if (rnd() < 0.5) { tris.push([tl, tr, br]); tris.push([tl, br, bl]); }
-        else { tris.push([tl, tr, bl]); tris.push([tr, br, bl]); }
-      }
-    }
-
-    var cx = W / 2;
-    var cy = H / 2;
-    var pull = 0.66; // how far the facets start pulled in towards the middle: the "ball"
-    var facetAnims = [];
-
-    tris.forEach(function (t) {
-      var mx = (t[0][0] + t[1][0] + t[2][0]) / 3;
-      var my = (t[0][1] + t[1][1] + t[2][1]) / 3;
-      // nudge each corner outwards by 1px so neighbouring facets overlap and no hairline seams show
-      var grown = t.map(function (p) {
-        var dx = p[0] - mx, dy = p[1] - my, d = Math.sqrt(dx * dx + dy * dy) || 1;
-        return [p[0] + (dx / d) * 1.5, p[1] + (dy / d) * 1.5];
-      });
-      var minX = Math.floor(Math.min(grown[0][0], grown[1][0], grown[2][0]));
-      var minY = Math.floor(Math.min(grown[0][1], grown[1][1], grown[2][1]));
-      var maxX = Math.ceil(Math.max(grown[0][0], grown[1][0], grown[2][0]));
-      var maxY = Math.ceil(Math.max(grown[0][1], grown[1][1], grown[2][1]));
-
-      var el = document.createElement('i');
-      el.className = 'lwl-paper__facet';
-      el.style.left = minX + 'px';
-      el.style.top = minY + 'px';
-      el.style.width = (maxX - minX) + 'px';
-      el.style.height = (maxY - minY) + 'px';
-      el.style.backgroundPosition = (-minX) + 'px ' + (-minY) + 'px';
-      el.style.clipPath = 'polygon(' + grown.map(function (p) {
-        return (p[0] - minX).toFixed(1) + 'px ' + (p[1] - minY).toFixed(1) + 'px';
-      }).join(',') + ')';
-      el.style.transformOrigin = (mx - minX).toFixed(1) + 'px ' + (my - minY).toFixed(1) + 'px';
-      var shade = document.createElement('b');
-      shade.className = 'lwl-paper__shade';
-      var ang = Math.round(rnd() * 360);
-      var dark = (0.22 + rnd() * 0.26).toFixed(2);
-      shade.style.background = 'linear-gradient(' + ang + 'deg, rgba(40,30,22,' + dark + ') 0%, rgba(40,30,22,0) 55%, rgba(255,255,255,0.22) 100%)';
-      el.appendChild(shade);
-      root.appendChild(el);
-
-      // start: pulled towards the centre, tipped in 3D, shrunk and shaded; end: flat in place
-      var tx = (cx - mx) * pull + (rnd() - 0.5) * 60;
-      var ty = (cy - my) * pull + (rnd() - 0.5) * 60;
-      var tz = -(30 + rnd() * 260);
-      var ax = rnd() * 2 - 1, ay = rnd() * 2 - 1;
-      var deg = 22 + rnd() * 40;
-      var s0 = 0.84 + rnd() * 0.2;
-      var b0 = 0.66 + rnd() * 0.36;
-      var from = 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,' + tz.toFixed(1) + 'px) ' +
-                 'rotate3d(' + ax.toFixed(2) + ',' + ay.toFixed(2) + ',0,' + deg.toFixed(1) + 'deg) scale(' + s0.toFixed(2) + ')';
-      var to = 'translate3d(0,0,0) rotate3d(' + ax.toFixed(2) + ',' + ay.toFixed(2) + ',0,0deg) scale(1)';
-
-      all.push(shade.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, delay: 250, easing: 'ease-out', fill: 'both' }));
-
-      var facetAnim = el.animate(
-        [
-          { transform: from, filter: 'brightness(' + b0.toFixed(2) + ')' },
-          { transform: to, filter: 'brightness(1)' }
-        ],
-        { duration: 1000, delay: 100 + rnd() * 300, easing: 'cubic-bezier(0.16, 0.84, 0.3, 1)', fill: 'both' }
-      );
-      facetAnims.push(facetAnim);
-      all.push(facetAnim);
-    });
-
-    all.push(root.animate(
-      [{ backgroundColor: '{{ section.settings.gap_color }}' }, { backgroundColor: '#efece6' }],
-      { duration: 450, delay: 560, easing: 'ease-in', fill: 'both' }
-    ));
-
-    // hold the crumpled ball on screen (every animation paused at its first frame) until the texture is ready
-    all.forEach(function (a) { a.pause(); });
-    tex.onload = start;
-    tex.onerror = start;
-    if (tex.complete) start();
-    else window.setTimeout(start, 400);
 
     var fading = false;
     function fadeOut(ms) {
@@ -233,16 +135,102 @@
     root.addEventListener('click', function () { fadeOut(220); });
     window.addEventListener('keydown', function (e) { if (e.key === 'Escape') fadeOut(220); });
 
-    // once the paper is flat, wait a moment (at most 1s) for the page to finish loading, then fade it away
-    Promise.all(facetAnims.map(function (a) { return a.finished; })).then(function () {
-      if (fading) return;
-      var waited = 0;
-      (function check() {
-        if (document.readyState === 'complete' || waited >= 600) { fadeOut(400); return; }
-        waited += 100;
-        window.setTimeout(check, 100);
-      })();
-    }).catch(function () {});
+    function loadImage(src, cls, w, h) {
+      return new Promise(function (resolve, reject) {
+        var img = new Image();
+        img.className = cls;
+        img.alt = '';
+        img.width = w;
+        img.height = h;
+        img.onload = function () {
+          if (img.decode) img.decode().then(function () { resolve(img); }, function () { resolve(img); });
+          else resolve(img);
+        };
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    // start both downloads now; the ball is needed first, the sheet about a second later
+    var ballPromise = loadImage('{{ 'lwl-paper-ball.webp' | asset_url }}', 'lwl-paper__ball', 457, 541);
+    var sheetPromise = loadImage('{{ 'lwl-paper-sheet.webp' | asset_url }}', 'lwl-paper__sheet', 1107, 1453);
+    var sheet = null;
+    sheetPromise.then(function (img) {
+      sheet = img;
+      if (!done) root.appendChild(img);
+    }, function () {});
+
+    // if the ball cannot be shown quickly, skip the intro rather than keep the page covered
+    var started = false;
+    var ballTimer = window.setTimeout(function () { if (!started) fadeOut(260); }, 1200);
+
+    ballPromise.then(function (ball) {
+      if (done || fading) return;
+      started = true;
+      window.clearTimeout(ballTimer);
+      root.appendChild(ball);
+      var t0 = performance.now();
+
+      // 1) the ball pops in, then rocks gently
+      ball.animate(
+        [
+          { transform: 'scale(0.15) rotate(-28deg)', opacity: 0 },
+          { transform: 'scale(1.1) rotate(6deg)', opacity: 1, offset: 0.65 },
+          { transform: 'scale(1) rotate(0deg)', opacity: 1 }
+        ],
+        { duration: 320, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)', fill: 'both' }
+      );
+      var rock = ball.animate(
+        [
+          { transform: 'rotate(-3.5deg) translateY(0)' },
+          { transform: 'rotate(3.5deg) translateY(-7px)' },
+          { transform: 'rotate(-3.5deg) translateY(0)' }
+        ],
+        { duration: 900, delay: 320, iterations: Infinity, easing: 'ease-in-out' }
+      );
+
+      // 2) after a short hold (and once the page has loaded, for at most 0.6s more), it opens
+      function tryOpen() {
+        if (done || fading) return;
+        var elapsed = performance.now() - t0;
+        var pageReady = document.readyState === 'complete' || elapsed > 700 + 600;
+        if (elapsed >= 700 && pageReady && sheet) { openUp(); return; }
+        if (elapsed > 700 + 1400 && !sheet) { fadeOut(300); return; } // the sheet never arrived: just reveal the page
+        window.setTimeout(tryOpen, 50);
+      }
+      window.setTimeout(tryOpen, 700);
+
+      function openUp() {
+        var cur = window.getComputedStyle(ball).transform;
+        rock.cancel();
+        // the ball swells and fades as the sheet unfolds in its place, and the backdrop clears to show the page
+        ball.animate(
+          [{ transform: cur === 'none' ? 'scale(1)' : cur, opacity: 1 }, { transform: 'scale(2) rotate(18deg)', opacity: 0 }],
+          { duration: 300, easing: 'cubic-bezier(0.5, 0, 0.9, 0.6)', fill: 'forwards' }
+        );
+        sheet.animate(
+          [
+            { transform: 'scale(0.45) rotate(-7deg)', opacity: 0 },
+            { transform: 'scale(1.03) rotate(0.5deg)', opacity: 1, offset: 0.55 },
+            { transform: 'scale(1) rotate(0deg)', opacity: 1 }
+          ],
+          { duration: 360, delay: 60, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)', fill: 'both' }
+        );
+        if (backdrop) backdrop.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 360, delay: 140, easing: 'ease', fill: 'forwards' });
+
+        // 3) the camera pushes through the tear: the sheet zooms past, the live page is revealed
+        var push = sheet.animate(
+          [
+            { transform: 'scale(1)', opacity: 1 },
+            { transform: 'scale(3.4)', opacity: 1, offset: 0.7 },
+            { transform: 'scale(4.8)', opacity: 0 }
+          ],
+          { duration: 580, delay: 700, easing: 'cubic-bezier(0.55, 0, 0.9, 0.55)', fill: 'forwards' }
+        );
+        push.onfinish = cleanup;
+        push.oncancel = cleanup;
+      }
+    }, function () { fadeOut(200); });
   })();
 </script>
 
@@ -263,10 +251,18 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "cover_page",
+      "label": "Cover the page while the paper ball appears",
+      "info": "When off, the ball pops straight onto the live page instead.",
+      "default": true
+    },
+    {
       "type": "color",
-      "id": "gap_color",
-      "label": "Color seen between the folds",
-      "default": "#3b322d"
+      "id": "backdrop_color",
+      "label": "Backdrop color",
+      "info": "The color covering the page at first (when the option above is on).",
+      "default": "#fcc0c5"
     }
   ],
   "presets": [
