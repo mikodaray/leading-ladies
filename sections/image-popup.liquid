@@ -1,4 +1,9 @@
 {%- style -%}
+  /* the popup and its button are fixed-position, so keep this wrapper from adding page spacing */
+  #shopify-section-{{ section.id }} {
+    margin: 0;
+  }
+
   #ImagePopup-{{ section.id }} {
     position: fixed;
     top: 0;
@@ -224,8 +229,19 @@
   }
 {%- endstyle -%}
 
-{%- if section.settings.image != blank -%}
-  <div id="ImagePopup-{{ section.id }}" class="image-popup" data-image-popup data-delay="{{ section.settings.delay_seconds | times: 1000 }}">
+{%- assign popup_here = true -%}
+{%- if section.settings.only_on_product != blank and product.handle != section.settings.only_on_product -%}
+  {%- assign popup_here = false -%}
+{%- endif -%}
+
+{%- if section.settings.image != blank and popup_here -%}
+  <div
+    id="ImagePopup-{{ section.id }}"
+    class="image-popup"
+    data-image-popup
+    data-delay="{{ section.settings.delay_seconds | times: 1000 }}"
+    data-remember-close="{{ section.settings.remember_close }}"
+  >
     <div class="image-popup__content">
       <button
         type="button"
@@ -315,8 +331,37 @@
         popup.classList.remove('image-popup--visible');
       }
 
+      // Optionally remember, per page, that the popup was closed so it stops
+      // auto-opening there. The trigger button keeps working either way.
+      var rememberClose = popup.dataset.rememberClose === 'true';
+      var closedKey = 'imagePopupClosed:' + window.location.pathname;
+
+      function wasClosedBefore() {
+        if (!rememberClose) return false;
+        try {
+          return window.localStorage.getItem(closedKey) === '1';
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function rememberClosed() {
+        if (!rememberClose) return;
+        try {
+          window.localStorage.setItem(closedKey, '1');
+        } catch (e) {}
+      }
+
+      function autoShow() {
+        if (wasClosedBefore()) return;
+        window.setTimeout(showPopup, delay);
+      }
+
       popup.querySelectorAll('[data-image-popup-close]').forEach(function (el) {
-        el.addEventListener('click', hidePopup);
+        el.addEventListener('click', function () {
+          hidePopup();
+          rememberClosed();
+        });
       });
 
       if (trigger) {
@@ -356,17 +401,17 @@
         });
       }
 
-      window.setTimeout(showPopup, delay);
+      autoShow();
 
       // Browsers can restore this page from bfcache (e.g. hitting back) without
       // re-running the script above, which would otherwise leave the popup
       // hidden after it was closed once. Re-trigger it on that kind of restore
-      // so it reliably shows on every visit.
+      // so it reliably shows on every visit (unless it is set to stay closed).
       window.addEventListener('pageshow', function (event) {
         if (event.persisted) {
           hidePopup();
           resetTag();
-          window.setTimeout(showPopup, delay);
+          autoShow();
         }
       });
     })();
@@ -379,7 +424,7 @@
   "tag": "section",
   "class": "section image-popup-section",
   "enabled_on": {
-    "templates": ["index"]
+    "templates": ["index", "product"]
   },
   "settings": [
     {
@@ -403,6 +448,19 @@
       "id": "trigger_image",
       "label": "Trigger button logo",
       "info": "Shown on the button that reopens the popup, instead of text."
+    },
+    {
+      "type": "text",
+      "id": "only_on_product",
+      "label": "Only show on this product (handle)",
+      "info": "For product pages: leave empty to show on every product, or enter a handle such as ladies-who-launch-season-4."
+    },
+    {
+      "type": "checkbox",
+      "id": "remember_close",
+      "label": "Don't auto-open again once it has been closed on this page",
+      "info": "The button stays on screen so visitors can reopen the popup.",
+      "default": false
     },
     {
       "type": "range",
