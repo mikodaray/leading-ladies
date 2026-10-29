@@ -46,7 +46,7 @@
         "feature_2": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-10.jpg", "title": "Meaningful Networking", "text": "Meet potential collaborators, business partners, mentors, clients, and new friends. We’ve created opportunities to make connections that go beyond exchanging Instagram handles." } },
         "feature_3": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-3.jpg", "title": "Conversations That Don’t Happen Anywhere Else", "text": "From business challenges and difficult decisions to personal growth and navigating setbacks, we’re opening up conversations that women don’t always get to have." } },
         "feature_4": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-9.jpg", "title": "A Curated Gift Bag", "text": "Every attendee takes home a gift bag filled with goodies and surprises from our partner brands!" } },
-        "feature_5": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-12.jpg", "title": "Exciting Raffle Prizes", "text": "Get a chance to win Sunlight Air tickets, a TECNO smartphone, and many more exciting prizes!" } },
+        "feature_5": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-12.jpg", "title": "Exciting Raffle Prizes", "text": "Get a chance to win **Sunlight Air tickets**, a **TECNO smartphone**, and many more exciting prizes!" } },
         "feature_6": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-4.jpg", "title": "Food & Drinks", "text": "Enjoy food and refreshments throughout the event while connecting with our community." } }
       },
       "block_order": ["feature_1", "feature_2", "feature_3", "feature_4", "feature_5", "feature_6"],

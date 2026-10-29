@@ -63,11 +63,58 @@
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   }
 
+  #LwlWhyJoin-{{ section.id }} .lwl-why__highlight {
+    display: inline-block;
+    font-weight: 800;
+    color: #121212;
+    background: #fcc0c5;
+    padding: 0 0.7rem;
+    border-radius: 0.6rem;
+    text-shadow: none;
+  }
+
+  #LwlWhyJoin-{{ section.id }} .lwl-why__card.is-visible .lwl-why__highlight {
+    animation: lwl-highlight-pop 0.8s cubic-bezier(0.2, 0.9, 0.3, 1.4) 0.4s both,
+      lwl-highlight-pulse 2.4s ease-in-out 1.4s infinite;
+  }
+
+  #LwlWhyJoin-{{ section.id }} .lwl-why__card.is-visible .lwl-why__highlight:nth-of-type(2) {
+    animation-delay: 0.8s, 1.8s;
+  }
+
+  @keyframes lwl-highlight-pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.18);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes lwl-highlight-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(252, 192, 197, 0.7);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 0.9rem rgba(252, 192, 197, 0);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     #LwlWhyJoin-{{ section.id }} .lwl-why__card {
       opacity: 1;
       transform: none;
       transition: none;
+    }
+
+    #LwlWhyJoin-{{ section.id }} .lwl-why__card.is-visible .lwl-why__highlight {
+      animation: none;
     }
   }
 {%- endstyle -%}
@@ -90,7 +137,17 @@
           <h3 class="lwl-why__title">{{ block.settings.title | escape }}</h3>
         {%- endif -%}
         {%- if block.settings.text != blank -%}
-          <p class="lwl-why__text">{{ block.settings.text | escape }}</p>
+          <p class="lwl-why__text">
+            {%- assign text_parts = block.settings.text | escape | split: '**' -%}
+            {%- for part in text_parts -%}
+              {%- assign is_highlight = forloop.index0 | modulo: 2 -%}
+              {%- if is_highlight == 1 -%}
+                <strong class="lwl-why__highlight">{{ part }}</strong>
+              {%- else -%}
+                {{ part }}
+              {%- endif -%}
+            {%- endfor -%}
+          </p>
         {%- endif -%}
       </div>
     {%- endfor -%}
@@ -135,7 +192,7 @@
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Background image" },
         { "type": "text", "id": "title", "label": "Title" },
-        { "type": "textarea", "id": "text", "label": "Description" }
+        { "type": "textarea", "id": "text", "label": "Description", "info": "Wrap words in ** to highlight them, e.g. **Sunlight Air tickets**." }
       ]
     }
   ],
