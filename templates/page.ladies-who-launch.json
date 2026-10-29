@@ -19,200 +19,85 @@
       "block_order": ["mosaic_1", "mosaic_2", "mosaic_3", "mosaic_4"],
       "settings": {
         "eyebrow": "",
-        "heading": "Ladies Who Launch: Season 4",
+        "heading": "Ladies Who Launch Season 4",
         "logo_image": "shopify://shop_images/lwllogo3.png",
-        "subheading": "Where ambitious women connect, collaborate, and thrive.",
-        "copy": "<p>For four years, Leading Ladies has been successfully bridging like-minded women through meaningful conversations, authentic relationships, and transformative experiences.</p><p>From entrepreneurs and founders to executives, professionals, and creators, our community continues to grow because we believe success is even more powerful when shared.</p><p>Join us for Ladies Who Launch Season 4 and become part of a movement that empowers women to lead boldly, grow confidently, and support one another every step of the way.</p>",
+        "subheading": "Your next big opportunity might be sitting in this room.",
+        "copy": "<p>What if one conversation could lead to your next collaboration, business opportunity, mentor, or even a lifelong friendship?</p><p>That’s the magic of Ladies Who Launch.</p>",
         "event_datetime": "2026-11-14T10:00:00+08:00",
-        "primary_label": "Reserve Your Spot",
+        "primary_label": "Reserve Your Seat",
         "primary_link": "/products/ladies-who-launch-season-4",
-        "secondary_label": "Learn More",
-        "secondary_link": "/pages/about-1"
+        "secondary_label": "",
+        "secondary_link": ""
       }
     },
-    "lwl_stats": {
-      "type": "lwl-stats",
-      "blocks": {
-        "stat_1": { "type": "stat", "settings": { "value": "4 Years Strong", "text": "Building meaningful connections among women leaders." } },
-        "stat_2": { "type": "stat", "settings": { "value": "Growing Community", "text": "A thriving network of entrepreneurs and professionals." } },
-        "stat_3": { "type": "stat", "settings": { "value": "Regular Sold-Out Events", "text": "Curated experiences designed for authentic connection." } },
-        "stat_4": { "type": "stat", "settings": { "value": "Countless Collaborations", "text": "Friendships, mentorships, partnerships and opportunities created." } }
-      },
-      "block_order": ["stat_1", "stat_2", "stat_3", "stat_4"],
-      "settings": {}
-    },
-    "lwl_statements": {
-      "type": "lwl-statements",
-      "blocks": {
-        "statement_1": { "type": "statement", "settings": { "image": "shopify://shop_images/statement-1.jpg" } },
-        "statement_2": { "type": "statement", "settings": { "image": "shopify://shop_images/statement-2.jpg" } },
-        "statement_3": { "type": "statement", "settings": { "image": "shopify://shop_images/statement-3.jpg" } }
-      },
-      "block_order": ["statement_1", "statement_2", "statement_3"],
-      "settings": {
-        "heading": ""
-      }
-    },
-    "lwl_story": {
-      "type": "lwl-story",
-      "blocks": {
-        "photo_1": { "type": "photo", "settings": { "image": "shopify://shop_images/eventpics-3.jpg" } },
-        "photo_2": { "type": "photo", "settings": { "image": "shopify://shop_images/eventpics-6.jpg" } },
-        "photo_3": { "type": "photo", "settings": { "image": "shopify://shop_images/eventpics-7.jpg" } },
-        "photo_4": { "type": "photo", "settings": { "image": "shopify://shop_images/eventpics-9.jpg" } },
-        "photo_5": { "type": "photo", "settings": { "image": "shopify://shop_images/eventpics-11.jpg" } },
-        "photo_6": { "type": "photo", "settings": { "image": "shopify://shop_images/eventpics-12.jpg" } }
-      },
-      "block_order": ["photo_1", "photo_2", "photo_3", "photo_4", "photo_5", "photo_6"],
-      "settings": {
-        "heading": "Four Years of Meaningful Connections",
-        "copy": "<p>For four years, Leading Ladies has brought together a growing community of women leaders, entrepreneurs, creators, and professionals who believe in the power of collaboration and shared success.</p><p>Every event has sparked conversations, partnerships, friendships, mentorships, and opportunities that continue long after the event ends.</p><p>Through Ladies Who Launch, we've successfully bridged like-minded women from different industries, backgrounds, and stages of business, creating a thriving ecosystem of support and growth.</p>"
-      }
-    },
-    "lwl_about": {
+    "lwl_intro": {
       "type": "lwl-about",
       "settings": {
         "image_1": "shopify://shop_images/eventpics-5.jpg",
         "image_2": "shopify://shop_images/eventpics-7.jpg",
-        "heading": "A Community Built By Women, For Women",
-        "copy": "<p>Leading Ladies was founded with a simple but powerful vision: to create a space where women leaders, entrepreneurs, and creators can connect, learn, and grow together.</p><p>Over the last four years, we have successfully bridged like-minded women across industries, backgrounds, and stages of business.</p><p>What started as intimate gatherings has evolved into a thriving community built on authentic relationships, collaboration, growth, and support. We believe that when women lift one another up, remarkable things happen.</p><p>Today, Leading Ladies continues to create opportunities for women to share knowledge, build confidence, expand networks, and unlock new possibilities.</p>"
+        "image_right": false,
+        "heading": "",
+        "copy": "<p>Now in its fourth season, Ladies Who Launch brings together 100 women who are building businesses, pursuing big ideas, navigating careers, and figuring things out along the way.</p><p>Whether you’re an entrepreneur, founder, creative, professional, or simply ready for your next chapter, there’s a seat for you.</p><p><strong>This isn’t your typical networking event.</strong></p><p>Expect honest conversations, inspiring stories, practical business lessons, and opportunities to connect with women you might never have met otherwise.</p><p>Because sometimes, being in the right room changes everything.</p>"
       }
     },
-    "lwl_why_join": {
+    "lwl_included": {
       "type": "lwl-why-join",
       "blocks": {
-        "feature_1": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-1.jpg", "title": "Meaningful Connections", "text": "Meet women who share your ambition and vision." } },
-        "feature_2": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-3.jpg", "title": "Inspiring Conversations", "text": "Learn from founders, entrepreneurs, and leaders." } },
-        "feature_3": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-5.jpg", "title": "Community Support", "text": "Find encouragement, accountability, and connection." } },
-        "feature_4": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-7.jpg", "title": "Collaboration Opportunities", "text": "Build partnerships and business relationships." } },
-        "feature_5": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-9.jpg", "title": "Leadership Growth", "text": "Gain fresh insights and new perspectives." } },
-        "feature_6": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-11.jpg", "title": "Lasting Relationships", "text": "Create connections that continue beyond the event." } }
+        "feature_1": { "type": "feature", "settings": { "icon": "✨", "title": "Inspiring Talks & Real Conversations", "text": "Hear from incredible women who have built businesses, overcome challenges, navigated criticism, and learned valuable lessons along the way. No sugarcoating, just honest conversations and experiences worth sharing." } },
+        "feature_2": { "type": "feature", "settings": { "icon": "🤝", "title": "Meaningful Networking", "text": "Meet potential collaborators, business partners, mentors, clients, and new friends. We’ve created opportunities to make connections that go beyond exchanging Instagram handles." } },
+        "feature_3": { "type": "feature", "settings": { "icon": "💬", "title": "Conversations That Don’t Happen Anywhere Else", "text": "From business challenges and difficult decisions to personal growth and navigating setbacks, we’re opening up conversations that women don’t always get to have." } },
+        "feature_4": { "type": "feature", "settings": { "icon": "🎁", "title": "A Curated Gift Bag", "text": "Every attendee takes home a gift bag filled with goodies and surprises from our partner brands!" } },
+        "feature_5": { "type": "feature", "settings": { "icon": "🎟️", "title": "Exciting Raffle Prizes", "text": "Get a chance to win Sunlight Air tickets, a TECNO smartphone, and many more exciting prizes!" } },
+        "feature_6": { "type": "feature", "settings": { "icon": "🍽️", "title": "Food & Drinks", "text": "Enjoy food and refreshments throughout the event while connecting with our community." } }
       },
       "block_order": ["feature_1", "feature_2", "feature_3", "feature_4", "feature_5", "feature_6"],
       "settings": {
-        "heading": "Why Join Ladies Who Launch Season 4?"
+        "heading": "What’s Included in Your Ticket?"
       }
     },
-    "lwl_showcase": {
-      "type": "lwl-showcase",
-      "blocks": {
-        "img_1": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-1.jpg" } },
-        "img_2": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-2.jpg" } },
-        "img_3": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-3.jpg" } },
-        "img_4": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-4.jpg" } },
-        "img_5": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-5.jpg" } },
-        "img_6": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-6.jpg" } },
-        "img_7": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-7.jpg" } },
-        "img_8": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-8.jpg" } },
-        "img_9": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-9.jpg" } },
-        "img_10": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-10.jpg" } },
-        "img_11": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-11.jpg" } },
-        "img_12": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-12.jpg" } }
-      },
-      "block_order": ["img_1", "img_2", "img_3", "img_4", "img_5", "img_6", "img_7", "img_8", "img_9", "img_10", "img_11", "img_12"],
+    "lwl_alone": {
+      "type": "lwl-about",
       "settings": {
-        "heading": "Experience the Leading Ladies Community"
+        "image_1": "shopify://shop_images/eventpics-10.jpg",
+        "image_2": "shopify://shop_images/eventpics-6.jpg",
+        "image_right": true,
+        "heading": "Coming Alone? You’re Not the Only One!",
+        "copy": "<p>You don’t need to bring a friend to belong in this room.</p><p>Some of the best connections begin when you show up somewhere new, introduce yourself, and discover how much you have in common with the women around you.</p><p>Come as you are. We’ll help make the introductions easier. ❤️</p>"
       }
     },
-    "lwl_timeline": {
-      "type": "lwl-timeline",
+    "lwl_details": {
+      "type": "lwl-event-details",
       "blocks": {
-        "step_1": { "type": "step", "settings": { "label": "Year 1: Building Connections" } },
-        "step_2": { "type": "step", "settings": { "label": "Year 2: Growing Community" } },
-        "step_3": { "type": "step", "settings": { "label": "Year 3: Expanding Impact" } },
-        "step_4": { "type": "step", "settings": { "label": "Year 4: Stronger Than Ever" } },
-        "step_5": { "type": "step", "settings": { "label": "Today: Ladies Who Launch Season 4" } }
+        "detail_1": { "type": "detail", "settings": { "icon": "📅", "label": "Date", "value": "November 14, 2026 | Saturday" } },
+        "detail_2": { "type": "detail", "settings": { "icon": "⏰", "label": "Time", "value": "10:00 AM – 4:00 PM" } },
+        "detail_3": { "type": "detail", "settings": { "icon": "📍", "label": "Location", "value": "Greyhound Café, Ayala Triangle Gardens, Makati City" } },
+        "detail_4": { "type": "detail", "settings": { "icon": "🎟️", "label": "Ticket Price", "value": "₱4,999" } }
       },
-      "block_order": ["step_1", "step_2", "step_3", "step_4", "step_5"],
+      "block_order": ["detail_1", "detail_2", "detail_3", "detail_4"],
       "settings": {
-        "heading": "Four Years of Connecting Women Who Lead",
-        "copy": "<p>For four years, Leading Ladies has remained committed to creating spaces where women can build meaningful relationships, exchange ideas, and support each other's growth.</p><p>Through numerous events, workshops, and gatherings, we have successfully connected like-minded women who continue to collaborate, mentor, inspire, and create impact together.</p><p>Season 4 celebrates that journey and welcomes a new generation of women who are ready to launch their next chapter.</p>"
+        "heading": "Event Details"
       }
-    },
-    "lwl_experience": {
-      "type": "lwl-experience",
-      "blocks": {
-        "item_1": { "type": "item", "settings": { "label": "Networking Sessions" } },
-        "item_2": { "type": "item", "settings": { "label": "Founder Conversations" } },
-        "item_3": { "type": "item", "settings": { "label": "Leadership Panels" } },
-        "item_4": { "type": "item", "settings": { "label": "Collaboration Opportunities" } },
-        "item_5": { "type": "item", "settings": { "label": "Community Building" } },
-        "item_6": { "type": "item", "settings": { "label": "Inspiring Stories" } }
-      },
-      "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6"],
-      "settings": {
-        "heading": "What To Expect"
-      }
-    },
-    "lwl_testimonials": {
-      "type": "lwl-testimonials",
-      "blocks": {
-        "testimonial_1": { "type": "testimonial", "settings": { "quote": "Leading Ladies introduced me to an incredible network of women who have become mentors, collaborators, and friends.", "author": "" } },
-        "testimonial_2": { "type": "testimonial", "settings": { "quote": "Every event leaves me inspired and empowered to take the next step in my journey.", "author": "" } },
-        "testimonial_3": { "type": "testimonial", "settings": { "quote": "The conversations, connections, and opportunities I've gained through this community have been invaluable.", "author": "" } }
-      },
-      "block_order": ["testimonial_1", "testimonial_2", "testimonial_3"],
-      "settings": {
-        "heading": "",
-        "background_image": "shopify://shop_images/eventpics-2.jpg"
-      }
-    },
-    "lwl_social_proof": {
-      "type": "lwl-social-proof",
-      "blocks": {
-        "social_1": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-1.jpg", "overlay_text": "Partnerships Started Here" } },
-        "social_2": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-2.jpg", "overlay_text": "Mentorships Created Here" } },
-        "social_3": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-3.jpg", "overlay_text": "Friendships Built Here" } },
-        "social_4": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-4.jpg", "overlay_text": "Women Supporting Women" } },
-        "social_5": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-5.jpg", "overlay_text": "Ideas Turned Into Businesses" } },
-        "social_6": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-6.jpg", "overlay_text": "Connections That Last" } },
-        "social_7": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-10.jpg" } },
-        "social_8": { "type": "image", "settings": { "image": "shopify://shop_images/eventpics-11.jpg" } }
-      },
-      "block_order": ["social_1", "social_2", "social_3", "social_4", "social_5", "social_6", "social_7", "social_8"],
-      "settings": {
-        "heading": "Built Through Real Connections"
-      }
-    },
-    "lwl_slider": {
-      "type": "lwl-slider",
-      "blocks": {
-        "slide_1": { "type": "slide", "settings": { "image": "shopify://shop_images/eventpics-9.jpg", "caption": "4 Years Strong" } },
-        "slide_2": { "type": "slide", "settings": { "image": "shopify://shop_images/eventpics-10.jpg", "caption": "Inspiring Women Leaders" } },
-        "slide_3": { "type": "slide", "settings": { "image": "shopify://shop_images/eventpics-11.jpg", "caption": "Meaningful Connections" } },
-        "slide_4": { "type": "slide", "settings": { "image": "shopify://shop_images/eventpics-12.jpg", "caption": "Growing Community" } },
-        "slide_5": { "type": "slide", "settings": { "image": "shopify://shop_images/eventpics-1.jpg", "caption": "Countless Collaborations" } }
-      },
-      "block_order": ["slide_1", "slide_2", "slide_3", "slide_4", "slide_5"],
-      "settings": {}
     },
     "lwl_final_cta": {
       "type": "lwl-final-cta",
       "settings": {
         "background_image": "shopify://shop_images/eventpics-9.jpg",
-        "heading": "Your Next Connection Could Change Everything",
-        "copy": "<p>For four years, Leading Ladies has been bringing together women who inspire, support, collaborate, and grow together. Now it's your turn.</p><p>Join Ladies Who Launch Season 4 and become part of a community that continues to create meaningful connections and lasting impact. Your next mentor, collaborator, business partner, client, or lifelong friend could be waiting in this room.</p>",
-        "primary_label": "Register Now",
+        "heading": "One Day. 100 Women. Endless Possibilities.",
+        "copy": "<p>You never know who you’ll meet, what you’ll learn, or which conversation might open your next door.</p><p>Come for the conversations. Leave with connections that could change your journey.</p><p><strong>Seats are limited.</strong></p>",
+        "primary_label": "Reserve Your Seat Today! 💗",
         "primary_link": "/products/ladies-who-launch-season-4",
-        "secondary_label": "Join The Community",
-        "secondary_link": "/pages/membership"
+        "secondary_label": "",
+        "secondary_link": ""
       }
     }
   },
   "order": [
     "main",
     "lwl_hero",
-    "lwl_stats",
-    "lwl_statements",
-    "lwl_story",
-    "lwl_about",
-    "lwl_why_join",
-    "lwl_showcase",
-    "lwl_timeline",
-    "lwl_experience",
-    "lwl_testimonials",
-    "lwl_social_proof",
-    "lwl_slider",
+    "lwl_intro",
+    "lwl_included",
+    "lwl_alone",
+    "lwl_details",
     "lwl_final_cta"
   ]
 }

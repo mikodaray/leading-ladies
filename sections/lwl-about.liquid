@@ -74,7 +74,22 @@
     margin-bottom: 0;
   }
 
+  #LwlAbout-{{ section.id }}.lwl-about--reverse .lwl-about__images {
+    order: 2;
+  }
+
+  #LwlAbout-{{ section.id }}.lwl-about--reverse .lwl-about__content {
+    transform: translateX(-2.4rem);
+  }
+
+  #LwlAbout-{{ section.id }}.lwl-about--reverse .lwl-about__content.is-visible {
+    transform: translateX(0);
+  }
+
   @media screen and (max-width: 900px) {
+    #LwlAbout-{{ section.id }}.lwl-about--reverse .lwl-about__images {
+      order: 0;
+    }
     #LwlAbout-{{ section.id }} .lwl-about__inner {
       grid-template-columns: 1fr;
     }
@@ -84,7 +99,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #LwlAbout-{{ section.id }} .lwl-about__content {
+    #LwlAbout-{{ section.id }} .lwl-about__content,
+    #LwlAbout-{{ section.id }}.lwl-about--reverse .lwl-about__content {
       opacity: 1;
       transform: none;
       transition: none;
@@ -92,7 +108,7 @@
   }
 {%- endstyle -%}
 
-<div id="LwlAbout-{{ section.id }}" class="lwl-about">
+<div id="LwlAbout-{{ section.id }}" class="lwl-about{% if section.settings.image_right %} lwl-about--reverse{% endif %}">
   <div class="lwl-about__inner">
     <div class="lwl-about__images">
       {%- if section.settings.image_1 != blank -%}
@@ -160,6 +176,7 @@
   "settings": [
     { "type": "image_picker", "id": "image_1", "label": "Image 1" },
     { "type": "image_picker", "id": "image_2", "label": "Image 2" },
+    { "type": "checkbox", "id": "image_right", "label": "Show images on the right", "default": false },
     { "type": "text", "id": "heading", "label": "Heading", "default": "A Community Built By Women, For Women" },
     { "type": "richtext", "id": "copy", "label": "Copy" }
   ],
