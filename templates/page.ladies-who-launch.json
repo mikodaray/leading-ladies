@@ -11,12 +11,11 @@
     "lwl_hero": {
       "type": "lwl-hero",
       "blocks": {
-        "mosaic_1": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-1.jpg" } },
-        "mosaic_2": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-2.jpg" } },
-        "mosaic_3": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-6.jpg" } },
-        "mosaic_4": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-8.jpg" } }
+        "mosaic_1": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-2.jpg" } },
+        "mosaic_2": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-7.jpg" } },
+        "mosaic_3": { "type": "mosaic_image", "settings": { "image": "shopify://shop_images/eventpics-6.jpg" } }
       },
-      "block_order": ["mosaic_1", "mosaic_2", "mosaic_3", "mosaic_4"],
+      "block_order": ["mosaic_1", "mosaic_2", "mosaic_3"],
       "settings": {
         "eyebrow": "",
         "heading": "Ladies Who Launch Season 4",
@@ -34,7 +33,7 @@
       "type": "lwl-about",
       "settings": {
         "image_1": "shopify://shop_images/eventpics-5.jpg",
-        "image_2": "shopify://shop_images/eventpics-3.jpg",
+        "image_2": "shopify://shop_images/eventpics-8.jpg",
         "image_right": false,
         "heading": "",
         "copy": "<p>Now in its fourth season, Ladies Who Launch brings together 100 women who are building businesses, pursuing big ideas, navigating careers, and figuring things out along the way.</p><p>Whether you’re an entrepreneur, founder, creative, professional, or simply ready for your next chapter, there’s a seat for you.</p><p><strong>This isn’t your typical networking event.</strong></p><p>Expect honest conversations, inspiring stories, practical business lessons, and opportunities to connect with women you might never have met otherwise.</p><p>Because sometimes, being in the right room changes everything.</p>"
@@ -43,12 +42,12 @@
     "lwl_included": {
       "type": "lwl-why-join",
       "blocks": {
-        "feature_1": { "type": "feature", "settings": { "icon": "✨", "title": "Inspiring Talks & Real Conversations", "text": "Hear from incredible women who have built businesses, overcome challenges, navigated criticism, and learned valuable lessons along the way. No sugarcoating, just honest conversations and experiences worth sharing." } },
-        "feature_2": { "type": "feature", "settings": { "icon": "🤝", "title": "Meaningful Networking", "text": "Meet potential collaborators, business partners, mentors, clients, and new friends. We’ve created opportunities to make connections that go beyond exchanging Instagram handles." } },
-        "feature_3": { "type": "feature", "settings": { "icon": "💬", "title": "Conversations That Don’t Happen Anywhere Else", "text": "From business challenges and difficult decisions to personal growth and navigating setbacks, we’re opening up conversations that women don’t always get to have." } },
-        "feature_4": { "type": "feature", "settings": { "icon": "🎁", "title": "A Curated Gift Bag", "text": "Every attendee takes home a gift bag filled with goodies and surprises from our partner brands!" } },
-        "feature_5": { "type": "feature", "settings": { "icon": "🎟️", "title": "Exciting Raffle Prizes", "text": "Get a chance to win Sunlight Air tickets, a TECNO smartphone, and many more exciting prizes!" } },
-        "feature_6": { "type": "feature", "settings": { "icon": "🍽️", "title": "Food & Drinks", "text": "Enjoy food and refreshments throughout the event while connecting with our community." } }
+        "feature_1": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-11.jpg", "title": "Inspiring Talks & Real Conversations", "text": "Hear from incredible women who have built businesses, overcome challenges, navigated criticism, and learned valuable lessons along the way. No sugarcoating, just honest conversations and experiences worth sharing." } },
+        "feature_2": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-10.jpg", "title": "Meaningful Networking", "text": "Meet potential collaborators, business partners, mentors, clients, and new friends. We’ve created opportunities to make connections that go beyond exchanging Instagram handles." } },
+        "feature_3": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-3.jpg", "title": "Conversations That Don’t Happen Anywhere Else", "text": "From business challenges and difficult decisions to personal growth and navigating setbacks, we’re opening up conversations that women don’t always get to have." } },
+        "feature_4": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-9.jpg", "title": "A Curated Gift Bag", "text": "Every attendee takes home a gift bag filled with goodies and surprises from our partner brands!" } },
+        "feature_5": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-12.jpg", "title": "Exciting Raffle Prizes", "text": "Get a chance to win Sunlight Air tickets, a TECNO smartphone, and many more exciting prizes!" } },
+        "feature_6": { "type": "feature", "settings": { "image": "shopify://shop_images/eventpics-4.jpg", "title": "Food & Drinks", "text": "Enjoy food and refreshments throughout the event while connecting with our community." } }
       },
       "block_order": ["feature_1", "feature_2", "feature_3", "feature_4", "feature_5", "feature_6"],
       "settings": {
@@ -58,8 +57,7 @@
     "lwl_alone": {
       "type": "lwl-about",
       "settings": {
-        "image_1": "shopify://shop_images/eventpics-10.jpg",
-        "image_2": "shopify://shop_images/eventpics-4.jpg",
+        "image_1": "shopify://shop_images/eventpics-1.jpg",
         "image_right": true,
         "heading": "Coming Alone? You’re Not the Only One!",
         "copy": "<p>You don’t need to bring a friend to belong in this room.</p><p>Some of the best connections begin when you show up somewhere new, introduce yourself, and discover how much you have in common with the women around you.</p><p>Come as you are. We’ll help make the introductions easier. ❤️</p>"
@@ -81,7 +79,6 @@
     "lwl_final_cta": {
       "type": "lwl-final-cta",
       "settings": {
-        "background_image": "shopify://shop_images/eventpics-9.jpg",
         "heading": "One Day. 100 Women. Endless Possibilities.",
         "copy": "<p>You never know who you’ll meet, what you’ll learn, or which conversation might open your next door.</p><p>Come for the conversations. Leave with connections that could change your journey.</p><p><strong>Seats are limited.</strong></p>",
         "primary_label": "Reserve Your Seat Today! 💗",

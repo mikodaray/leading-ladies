@@ -48,17 +48,11 @@
     transform: translateY(-0.6rem) scale(1.02);
   }
 
-  #LwlWhyJoin-{{ section.id }} .lwl-why__icon {
-    display: block;
-    font-size: 4rem;
-    line-height: 1;
-    margin: 0 0 1.6rem;
-  }
-
   #LwlWhyJoin-{{ section.id }} .lwl-why__title {
     font-size: 2.1rem;
     margin: 0 0 0.8rem;
     color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   }
 
   #LwlWhyJoin-{{ section.id }} .lwl-why__text {
@@ -66,6 +60,7 @@
     line-height: 1.6;
     color: #ffffff;
     margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -87,13 +82,10 @@
         class="lwl-why__card"
         data-lwl-reveal
         {% if block.settings.image != blank %}
-          style="background-image: linear-gradient(180deg, rgba(237, 58, 49, 0.55) 0%, rgba(237, 58, 49, 0.9) 100%), url('{{ block.settings.image | image_url: width: 700 }}');"
+          style="background-image: linear-gradient(180deg, rgba(237, 58, 49, 0.74) 0%, rgba(237, 58, 49, 0.9) 100%), url('{{ block.settings.image | image_url: width: 900 }}');"
         {% endif %}
         {{ block.shopify_attributes }}
       >
-        {%- if block.settings.icon != blank -%}
-          <span class="lwl-why__icon" aria-hidden="true">{{ block.settings.icon | escape }}</span>
-        {%- endif -%}
         {%- if block.settings.title != blank -%}
           <h3 class="lwl-why__title">{{ block.settings.title | escape }}</h3>
         {%- endif -%}
@@ -141,8 +133,7 @@
       "type": "feature",
       "name": "Feature",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Background image (optional)" },
-        { "type": "text", "id": "icon", "label": "Icon (emoji)" },
+        { "type": "image_picker", "id": "image", "label": "Background image" },
         { "type": "text", "id": "title", "label": "Title" },
         { "type": "textarea", "id": "text", "label": "Description" }
       ]
