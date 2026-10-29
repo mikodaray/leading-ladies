@@ -79,6 +79,7 @@
     "lwl_final_cta": {
       "type": "lwl-final-cta",
       "settings": {
+        "background_image": "shopify://shop_images/eventpics-2.jpg",
         "heading": "One Day. 100 Women. Endless Possibilities.",
         "copy": "<p>You never know who you’ll meet, what you’ll learn, or which conversation might open your next door.</p><p>Come for the conversations. Leave with connections that could change your journey.</p><p><strong>Seats are limited.</strong></p>",
         "primary_label": "Reserve Your Seat Today! 💗",
