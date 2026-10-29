@@ -25,6 +25,7 @@
         "copy": "<p>What if one conversation could lead to your next collaboration, business opportunity, mentor, or even a lifelong friendship?</p><p>That’s the magic of Ladies Who Launch.</p>",
         "event_datetime": "2026-11-14T10:00:00+08:00",
         "primary_label": "Reserve Your Seat",
+        "primary_image": "shopify://shop_images/reserveyourseat-lwl.png",
         "primary_link": "/products/ladies-who-launch-season-4",
         "secondary_label": "",
         "secondary_link": ""

@@ -245,6 +245,74 @@
     box-shadow: 0 1.4rem 3rem rgba(0, 0, 0, 0.3);
   }
 
+  /* image button: a neon sign that pulses to show it is clickable */
+  #LwlHero-{{ section.id }} .lwl-hero__cta-image {
+    display: block;
+    width: clamp(24rem, 34vw, 32rem);
+    max-width: 100%;
+    line-height: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: scale 0.25s ease;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__cta-image:hover,
+  #LwlHero-{{ section.id }} .lwl-hero__cta-image:focus-visible {
+    scale: 1.08;
+  }
+
+  #LwlHero-{{ section.id }} .lwl-hero__cta-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* crop to the sign; the 12px side trim removes the glow the source file cuts off at its edges */
+    aspect-ratio: 1000 / 582;
+    object-fit: cover;
+    object-position: 50% 45%;
+    animation: lwl-seat-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes lwl-seat-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 0.6rem rgba(255, 255, 255, 0.35)) brightness(1);
+    }
+    50% {
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 1.8rem rgba(255, 235, 235, 0.9)) brightness(1.12);
+    }
+  }
+
+  /* on click: press in, flash, then burst away; the link only opens once this has played */
+  #LwlHero-{{ section.id }} .lwl-hero__cta-image.is-clicked img {
+    animation: lwl-seat-click 0.85s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+  }
+
+  @keyframes lwl-seat-click {
+    0% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 0.8rem rgba(255, 255, 255, 0.4)) brightness(1);
+      opacity: 1;
+    }
+    20% {
+      transform: scale(0.9);
+    }
+    50% {
+      transform: scale(1.18);
+      filter: drop-shadow(0 0 3rem rgba(255, 255, 255, 1)) brightness(1.5);
+    }
+    75% {
+      transform: scale(1.12);
+      filter: drop-shadow(0 0 3rem rgba(255, 255, 255, 0.9)) brightness(1.3);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      filter: drop-shadow(0 0 4rem rgba(255, 255, 255, 0.9)) brightness(1.6);
+      opacity: 0;
+    }
+  }
+
   @media screen and (max-width: 749px) {
     #LwlHero-{{ section.id }} .lwl-hero__card {
       padding: 2.8rem 2rem;
@@ -325,7 +393,19 @@
     {%- endif -%}
 
     <div class="lwl-hero__actions">
-      {%- if section.settings.primary_label != blank and section.settings.primary_link != blank -%}
+      {%- if section.settings.primary_image != blank and section.settings.primary_link != blank -%}
+        <a href="{{ section.settings.primary_link }}" class="lwl-hero__cta-image" data-lwl-cta-image>
+          <img
+            src="{{ section.settings.primary_image | image_url: width: 800 }}"
+            srcset="{{ section.settings.primary_image | image_url: width: 600 }} 600w, {{ section.settings.primary_image | image_url: width: 800 }} 800w"
+            sizes="(min-width: 750px) 32rem, 80vw"
+            alt="{{ section.settings.primary_label | default: 'Reserve your seat' | escape }}"
+            width="1000"
+            height="582"
+            loading="eager"
+          >
+        </a>
+      {%- elsif section.settings.primary_label != blank and section.settings.primary_link != blank -%}
         <a href="{{ section.settings.primary_link }}" class="lwl-hero__cta lwl-hero__cta--primary">
           {{ section.settings.primary_label | escape }}
           <span aria-hidden="true">&rarr;</span>
@@ -372,6 +452,42 @@
 
       tick();
       setInterval(tick, 1000);
+    }
+
+    // The image button plays its click animation first, then opens the link.
+    var cta = section.querySelector('[data-lwl-cta-image]');
+    if (cta) {
+      var ctaClicked = false;
+
+      cta.addEventListener('click', function (event) {
+        // let new-tab / modified clicks behave like a normal link
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        event.preventDefault();
+        if (ctaClicked) return;
+        ctaClicked = true;
+        cta.classList.add('is-clicked');
+
+        var opened = false;
+        function openLink() {
+          if (opened) return;
+          opened = true;
+          window.location.href = cta.href;
+        }
+
+        var ctaImg = cta.querySelector('img');
+        if (ctaImg) ctaImg.addEventListener('animationend', openLink, { once: true });
+        window.setTimeout(openLink, 1100); // safety net if animationend never fires
+      });
+
+      // a bfcache restore (Back button) should not leave the button mid-animation
+      window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+          ctaClicked = false;
+          cta.classList.remove('is-clicked');
+        }
+      });
     }
 
     var mosaic = section.querySelector('[data-lwl-parallax]');
@@ -440,12 +556,19 @@
       "type": "text",
       "id": "primary_label",
       "label": "Primary button label",
-      "default": "Reserve Your Spot"
+      "default": "Reserve Your Spot",
+      "info": "Used as the text button, and as the image's accessible name."
     },
     {
       "type": "url",
       "id": "primary_link",
       "label": "Primary button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "primary_image",
+      "label": "Primary button image",
+      "info": "Replaces the text button. It pulses, and plays a click animation before opening the link."
     },
     {
       "type": "text",
