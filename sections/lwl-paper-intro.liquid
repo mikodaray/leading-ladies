@@ -154,24 +154,22 @@
       });
     }
 
-    // start both downloads now; the ball is needed first, the sheet about a second later
+    // Both images were preloaded and are requested again here (same URL, so the preloaded copy is used).
+    // The intro only plays if BOTH are in hand within a short window; otherwise the page is revealed straight
+    // away, so a slow connection is never held on a bare backdrop waiting for decoration.
     var ballPromise = loadImage('{{ 'lwl-paper-ball.webp' | asset_url }}', 'lwl-paper__ball', 457, 541);
     var sheetPromise = loadImage('{{ 'lwl-paper-sheet.webp' | asset_url }}', 'lwl-paper__sheet', 1107, 1453);
-    var sheet = null;
-    sheetPromise.then(function (img) {
-      sheet = img;
-      if (!done) root.appendChild(img);
-    }, function () {});
-
-    // if the ball cannot be shown quickly, skip the intro rather than keep the page covered
     var started = false;
-    var ballTimer = window.setTimeout(function () { if (!started) fadeOut(260); }, 1500);
+    var giveUpTimer = window.setTimeout(function () { if (!started) fadeOut(220); }, 800);
 
-    ballPromise.then(function (ball) {
+    Promise.all([ballPromise, sheetPromise]).then(function (imgs) {
       if (done || fading) return;
       started = true;
-      window.clearTimeout(ballTimer);
+      window.clearTimeout(giveUpTimer);
+      var ball = imgs[0];
+      var sheet = imgs[1];
       root.appendChild(ball);
+      root.appendChild(sheet); // invisible (opacity 0) until it is animated in
       var t0 = performance.now();
 
       // 1) the ball pops in, then rocks gently
@@ -197,8 +195,7 @@
         if (done || fading) return;
         var elapsed = performance.now() - t0;
         var pageReady = document.readyState === 'complete' || elapsed > 600 + 300;
-        if (elapsed >= 600 && pageReady && sheet) { openUp(); return; }
-        if (elapsed > 600 + 1400 && !sheet) { fadeOut(300); return; } // the sheet never arrived: just reveal the page
+        if (elapsed >= 600 && pageReady) { openUp(); return; }
         window.setTimeout(tryOpen, 50);
       }
       window.setTimeout(tryOpen, 600);
