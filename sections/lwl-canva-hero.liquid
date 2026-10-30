@@ -1,0 +1,90 @@
+<link rel="stylesheet" href="{{ 'lwl-canva.css' | asset_url }}">
+
+{%- comment -%}
+  Hero of the Canva-based landing page: the crowd photo washed out behind the Season 4 poster and the ticket button.
+  Leave the pickers empty to use the built-in artwork (theme assets lwl-hero-crowd.jpg and lwl-poster.jpg).
+{%- endcomment -%}
+
+<div
+  id="LwlcHero-{{ section.id }}"
+  class="lwlc lwlc-hero"
+  style="--lwlc-bg-opacity: {{ section.settings.background_opacity | divided_by: 100.0 }};"
+>
+  <script>
+    (function () {
+      var root = document.getElementById('LwlcHero-{{ section.id }}');
+      if (!root || (window.Shopify && window.Shopify.designMode)) return;
+      root.classList.add('lwlc-ready');
+      window.setTimeout(function () { if (!window.lwlcBound) root.classList.remove('lwlc-ready'); }, 6000);
+    })();
+  </script>
+
+  <div class="lwlc-hero__bg" aria-hidden="true">
+    {%- if section.settings.background != blank -%}
+      <img
+        src="{{ section.settings.background | image_url: width: 1600 }}"
+        srcset="{{ section.settings.background | image_url: width: 800 }} 800w, {{ section.settings.background | image_url: width: 1600 }} 1600w"
+        sizes="100vw"
+        alt=""
+        width="1600"
+        height="900"
+        fetchpriority="high"
+      >
+    {%- else -%}
+      <img src="{{ 'lwl-hero-crowd.jpg' | asset_url }}" alt="" width="1080" height="660" fetchpriority="high">
+    {%- endif -%}
+  </div>
+
+  <div class="lwlc__stage lwlc-hero__stage">
+    {%- if section.settings.poster != blank -%}
+      <img
+        class="lwlc-hero__poster"
+        src="{{ section.settings.poster | image_url: width: 924 }}"
+        srcset="{{ section.settings.poster | image_url: width: 462 }} 462w, {{ section.settings.poster | image_url: width: 924 }} 924w"
+        sizes="(min-width: 960px) 462px, 72vw"
+        alt="{{ section.settings.poster.alt | default: 'Ladies Who Launch Season 4 poster' | escape }}"
+        width="462"
+        height="578"
+        fetchpriority="high"
+      >
+    {%- else -%}
+      <img
+        class="lwlc-hero__poster"
+        src="{{ 'lwl-poster.jpg' | asset_url }}"
+        alt="Ladies Who Launch Season 4 poster"
+        width="924"
+        height="1155"
+        fetchpriority="high"
+      >
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <a href="{{ section.settings.button_link }}" class="lwlc-button" data-lwlc-cta>
+        {{- section.settings.button_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+<script src="{{ 'lwl-canva.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "LWL Canva Hero",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "image_picker", "id": "background", "label": "Background photo", "info": "Leave empty to use the built-in crowd photo." },
+    { "type": "range", "id": "background_opacity", "min": 20, "max": 100, "step": 1, "unit": "%", "label": "Background photo strength", "info": "How strongly the photo shows through the white wash.", "default": 57 },
+    { "type": "image_picker", "id": "poster", "label": "Poster", "info": "Leave empty to use the built-in Season 4 poster." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Get your tickets here" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [
+    { "name": "LWL Canva Hero" }
+  ]
+}
+{% endschema %}

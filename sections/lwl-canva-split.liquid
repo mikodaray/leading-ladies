@@ -1,0 +1,131 @@
+<link rel="stylesheet" href="{{ 'lwl-canva.css' | asset_url }}">
+
+{%- comment -%}
+  A coloured band with a faded cutout photo on the left and text on the right, with the Ladies Who Launch logo
+  above the text, below it, or over the photo. Leave the pickers empty to use the built-in artwork
+  (theme assets lwl-cutout-1/2/3.webp and lwl-logo.webp).
+{%- endcomment -%}
+{%- liquid
+  assign logo_position = section.settings.logo_position
+  assign built_in = 'lwl-cutout-' | append: section.settings.built_in_image | append: '.webp'
+-%}
+
+<div
+  id="LwlcSplit-{{ section.id }}"
+  class="lwlc lwlc-split"
+  style="--lwlc-bg: {{ section.settings.background }}; --lwlc-text: {{ section.settings.text_color }}; --lwlc-img-opacity: {{ section.settings.image_opacity | divided_by: 100.0 }}; --lwlc-img-w: {{ section.settings.image_width }}%; --lwlc-text-top: {{ section.settings.text_top }};"
+>
+  <script>
+    (function () {
+      var root = document.getElementById('LwlcSplit-{{ section.id }}');
+      if (!root || (window.Shopify && window.Shopify.designMode)) return;
+      root.classList.add('lwlc-ready');
+      window.setTimeout(function () { if (!window.lwlcBound) root.classList.remove('lwlc-ready'); }, 6000);
+    })();
+  </script>
+
+  <div class="lwlc__stage lwlc-split__stage">
+    <div class="lwlc-split__panel">
+      {%- if section.settings.image != blank -%}
+        <img
+          class="lwlc-split__img"
+          src="{{ section.settings.image | image_url: width: 1100 }}"
+          srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 1100 }} 1100w"
+          sizes="(min-width: 960px) 780px, 100vw"
+          alt=""
+          loading="lazy"
+        >
+      {%- else -%}
+        <img class="lwlc-split__img" src="{{ built_in | asset_url }}" alt="" loading="lazy">
+      {%- endif -%}
+
+      {%- if logo_position == 'image' -%}
+        {%- if section.settings.logo != blank -%}
+          <img class="lwlc-split__overlay-logo" src="{{ section.settings.logo | image_url: width: 700 }}" alt="" loading="lazy">
+        {%- else -%}
+          <img class="lwlc-split__overlay-logo" src="{{ 'lwl-logo.webp' | asset_url }}" alt="" width="952" height="405" loading="lazy">
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    <div class="lwlc-split__text lwlc-reveal" data-lwlc-reveal>
+      {%- if logo_position == 'above' or logo_position == 'below' -%}
+        {%- capture logo_html -%}
+          {%- if section.settings.logo != blank -%}
+            <img
+              class="lwlc-split__logo lwlc-split__logo--{{ logo_position }}"
+              src="{{ section.settings.logo | image_url: width: 700 }}"
+              alt="{{ section.settings.logo.alt | default: 'Ladies Who Launch! Season 4' | escape }}"
+              loading="lazy"
+            >
+          {%- else -%}
+            <img
+              class="lwlc-split__logo lwlc-split__logo--{{ logo_position }}"
+              src="{{ 'lwl-logo.webp' | asset_url }}"
+              alt="Ladies Who Launch! Season 4"
+              width="952"
+              height="405"
+              loading="lazy"
+            >
+          {%- endif -%}
+        {%- endcapture -%}
+      {%- endif -%}
+
+      {%- if logo_position == 'above' -%}{{ logo_html }}{%- endif -%}
+      {%- if section.settings.copy != blank -%}
+        <div class="lwlc-split__copy">{{ section.settings.copy }}</div>
+      {%- endif -%}
+      {%- if logo_position == 'below' -%}{{ logo_html }}{%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'lwl-canva.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "LWL Canva Split",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "color", "id": "background", "label": "Background color", "default": "#da2d1d" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff" },
+    { "type": "image_picker", "id": "image", "label": "Cutout photo", "info": "A transparent PNG works best. Leave empty to use the built-in cutout chosen below." },
+    {
+      "type": "select",
+      "id": "built_in_image",
+      "label": "Built-in cutout",
+      "info": "Used when no photo is picked above.",
+      "options": [
+        { "value": "1", "label": "Four women" },
+        { "value": "2", "label": "Woman with a Yasss! fan" },
+        { "value": "3", "label": "Three women" }
+      ],
+      "default": "1"
+    },
+    { "type": "range", "id": "image_width", "min": 60, "max": 100, "step": 1, "unit": "%", "label": "Photo width", "info": "Share of the panel the photo covers.", "default": 100 },
+    { "type": "range", "id": "image_opacity", "min": 10, "max": 100, "step": 1, "unit": "%", "label": "Photo strength", "info": "How strongly the photo shows against the background color.", "default": 35 },
+    {
+      "type": "select",
+      "id": "logo_position",
+      "label": "Logo",
+      "options": [
+        { "value": "above", "label": "Above the text" },
+        { "value": "below", "label": "Below the text" },
+        { "value": "image", "label": "Over the photo" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "above"
+    },
+    { "type": "image_picker", "id": "logo", "label": "Logo image", "info": "Leave empty to use the built-in cream logo." },
+    { "type": "range", "id": "text_top", "min": 40, "max": 240, "step": 2, "unit": "px", "label": "Space above the text", "info": "On large screens, measured on the 1366px design canvas.", "default": 130 },
+    { "type": "richtext", "id": "copy", "label": "Text" }
+  ],
+  "presets": [
+    { "name": "LWL Canva Split" }
+  ]
+}
+{% endschema %}

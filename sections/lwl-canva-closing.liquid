@@ -1,0 +1,72 @@
+<link rel="stylesheet" href="{{ 'lwl-canva.css' | asset_url }}">
+
+{%- comment -%}
+  Closing band: heading, a few lines of text and the reserve button over a faint wordmark.
+  Leave the watermark picker empty to use the built-in wordmark (theme asset lwl-watermark.webp).
+{%- endcomment -%}
+
+<div
+  id="LwlcClosing-{{ section.id }}"
+  class="lwlc lwlc-closing"
+  style="--lwlc-bg: {{ section.settings.background }}; --lwlc-heading: {{ section.settings.heading_color }}; --lwlc-copy: {{ section.settings.text_color }}; --lwlc-watermark-opacity: {{ section.settings.watermark_opacity | divided_by: 100.0 }};"
+>
+  <script>
+    (function () {
+      var root = document.getElementById('LwlcClosing-{{ section.id }}');
+      if (!root || (window.Shopify && window.Shopify.designMode)) return;
+      root.classList.add('lwlc-ready');
+      window.setTimeout(function () { if (!window.lwlcBound) root.classList.remove('lwlc-ready'); }, 6000);
+    })();
+  </script>
+
+  <div class="lwlc__stage lwlc-closing__stage">
+    {%- if section.settings.watermark != blank -%}
+      <img class="lwlc-closing__watermark" src="{{ section.settings.watermark | image_url: width: 1200 }}" alt="" aria-hidden="true" loading="lazy">
+    {%- else -%}
+      <img class="lwlc-closing__watermark" src="{{ 'lwl-watermark.webp' | asset_url }}" alt="" aria-hidden="true" width="1200" height="601" loading="lazy">
+    {%- endif -%}
+
+    <div class="lwlc-closing__body lwlc-reveal" data-lwlc-reveal>
+      {%- if section.settings.heading != blank -%}
+        <h2 class="lwlc-heading lwlc-closing__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.copy != blank -%}
+        <div class="lwlc-closing__copy">{{ section.settings.copy }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <div class="lwlc-closing__action">
+          <a href="{{ section.settings.button_link }}" class="lwlc-button lwlc-button--display" data-lwlc-cta>
+            {{- section.settings.button_label | escape -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'lwl-canva.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "LWL Canva Closing",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "color", "id": "background", "label": "Background color", "default": "#ffa9d1" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "info": "White is the design's choice; it is hard to read on light pink, so a darker color may suit better.", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#842b2c" },
+    { "type": "image_picker", "id": "watermark", "label": "Watermark", "info": "A faint wordmark behind the text. Leave empty to use the built-in Leading Ladies wordmark." },
+    { "type": "range", "id": "watermark_opacity", "min": 0, "max": 40, "step": 1, "unit": "%", "label": "Watermark strength", "default": 12 },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "One Day. 100 Women. Endless Possibilities." },
+    { "type": "richtext", "id": "copy", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Reserve your seat today!" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [
+    { "name": "LWL Canva Closing" }
+  ]
+}
+{% endschema %}

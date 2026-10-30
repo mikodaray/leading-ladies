@@ -1,0 +1,152 @@
+<link rel="stylesheet" href="{{ 'lwl-canva.css' | asset_url }}">
+
+{%- comment -%}
+  A heading over a grid of coloured cards (three across). Used for "What's Included in Your Ticket?" and "The Details".
+  Wrap words in ** in a card's text to highlight them.
+{%- endcomment -%}
+{%- liquid
+  assign cards_class = 'lwlc-cards'
+  if section.settings.text_bold
+    assign cards_class = cards_class | append: ' lwlc-cards--bold'
+  endif
+  if section.settings.text_position == 'middle'
+    assign cards_class = cards_class | append: ' lwlc-cards--mid'
+  endif
+  assign heading_size = 50.66
+  assign heading_lh = 58
+  assign heading_top = 100
+  assign heading_gap = 74
+  if section.settings.heading_size == 'large'
+    assign heading_size = 61.17
+    assign heading_lh = 58
+    assign heading_top = 52
+    assign heading_gap = 64
+  endif
+-%}
+
+<div
+  id="LwlcCards-{{ section.id }}"
+  class="lwlc {{ cards_class }}"
+  style="--lwlc-bg: {{ section.settings.background }}; --lwlc-heading: {{ section.settings.heading_color }}; --lwlc-top: {{ heading_top }}; --lwlc-heading-gap: {{ heading_gap }}; --lwlc-heading-size: {{ heading_size }}; --lwlc-heading-lh: {{ heading_lh }};"
+>
+  <script>
+    (function () {
+      var root = document.getElementById('LwlcCards-{{ section.id }}');
+      if (!root || (window.Shopify && window.Shopify.designMode)) return;
+      root.classList.add('lwlc-ready');
+      window.setTimeout(function () { if (!window.lwlcBound) root.classList.remove('lwlc-ready'); }, 6000);
+    })();
+  </script>
+
+  <div class="lwlc__stage lwlc-cards__stage">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="lwlc-heading lwlc-cards__heading lwlc-reveal" data-lwlc-reveal>
+        <span class="lwlc-heading__line">{{ section.settings.heading | escape }}</span>
+        {%- if section.settings.heading_2 != blank -%}
+          <span class="lwlc-heading__line" style="color: {{ section.settings.heading_2_color }};">{{ section.settings.heading_2 | escape }}</span>
+        {%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    <div class="lwlc-cards__grid">
+      {%- for block in section.blocks -%}
+        <div
+          class="lwlc-card lwlc-card--{{ block.settings.color }} lwlc-reveal"
+          data-lwlc-reveal
+          style="--d: {{ forloop.index0 | modulo: 3 | times: 0.12 }}s;"
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.title != blank -%}
+            <h3 class="lwlc-card__title">{{ block.settings.title | escape | replace: ' | ', ' <br class="lwlc-br">' }}</h3>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <p class="lwlc-card__text">
+              {%- assign text_parts = block.settings.text | escape | newline_to_br | split: '**' -%}
+              {%- for part in text_parts -%}
+                {%- assign is_highlight = forloop.index0 | modulo: 2 -%}
+                {%- if is_highlight == 1 -%}
+                  <strong class="lwlc-chip">{{ part }}</strong>
+                {%- else -%}
+                  {{ part }}
+                {%- endif -%}
+              {%- endfor -%}
+            </p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'lwl-canva.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "LWL Canva Cards",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "color", "id": "background", "label": "Background color", "default": "#ffa9d1" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What’s Included in Your Ticket?" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "info": "White is the design's choice; it is hard to read on light pink, so a darker color may suit better.", "default": "#ffffff" },
+    { "type": "text", "id": "heading_2", "label": "Second heading line", "info": "Optional, shown under the heading in its own color." },
+    { "type": "color", "id": "heading_2_color", "label": "Second line color", "default": "#d86fb3" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "medium", "label": "Medium (one line)" },
+        { "value": "large", "label": "Large (two lines)" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Card text position",
+      "options": [
+        { "value": "bottom", "label": "Bottom of the card" },
+        { "value": "middle", "label": "Lower middle of the card" }
+      ],
+      "default": "bottom"
+    },
+    { "type": "checkbox", "id": "text_bold", "label": "Bold card text", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Card color",
+          "options": [
+            { "value": "magenta", "label": "Magenta" },
+            { "value": "white", "label": "White" },
+            { "value": "red", "label": "Red" },
+            { "value": "pink", "label": "Pink" }
+          ],
+          "default": "magenta"
+        },
+        { "type": "text", "id": "title", "label": "Title", "info": "Use \" | \" to suggest a line break on large screens." },
+        { "type": "textarea", "id": "text", "label": "Text", "info": "Wrap words in ** to highlight them, e.g. **Sunlight Air tickets**. A new line starts a new line." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LWL Canva Cards",
+      "blocks": [
+        { "type": "card", "settings": { "color": "magenta", "title": "Inspiring Talks & Real Conversations", "text": "Hear from incredible women." } },
+        { "type": "card", "settings": { "color": "white", "title": "Meaningful Networking", "text": "Meet potential collaborators." } },
+        { "type": "card", "settings": { "color": "red", "title": "Conversations That Don’t Happen Anywhere Else", "text": "Open, honest conversations." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

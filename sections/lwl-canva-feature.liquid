@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="{{ 'lwl-canva.css' | asset_url }}">
+
+{%- comment -%}
+  "Coming alone?" band: a rounded photo on the left and a heading with text on the right.
+  Leave the picker empty to use the built-in photo (theme asset lwl-selfie.jpg).
+{%- endcomment -%}
+
+<div
+  id="LwlcFeature-{{ section.id }}"
+  class="lwlc lwlc-feature"
+  style="--lwlc-bg: {{ section.settings.background }}; --lwlc-heading: {{ section.settings.heading_color }}; --lwlc-copy: {{ section.settings.text_color }};"
+>
+  <script>
+    (function () {
+      var root = document.getElementById('LwlcFeature-{{ section.id }}');
+      if (!root || (window.Shopify && window.Shopify.designMode)) return;
+      root.classList.add('lwlc-ready');
+      window.setTimeout(function () { if (!window.lwlcBound) root.classList.remove('lwlc-ready'); }, 6000);
+    })();
+  </script>
+
+  <div class="lwlc__stage lwlc-feature__stage">
+    <div class="lwlc-feature__photo lwlc-reveal" data-lwlc-reveal>
+      {%- if section.settings.image != blank -%}
+        <img
+          src="{{ section.settings.image | image_url: width: 1100 }}"
+          srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 1100 }} 1100w"
+          sizes="(min-width: 960px) 667px, 100vw"
+          alt="{{ section.settings.image.alt | escape }}"
+          loading="lazy"
+        >
+      {%- else -%}
+        <img src="{{ 'lwl-selfie.jpg' | asset_url }}" alt="Two women taking a selfie together at a Ladies Who Launch event" width="1080" height="1350" loading="lazy">
+      {%- endif -%}
+    </div>
+
+    <div class="lwlc-feature__text lwlc-reveal" data-lwlc-reveal style="--d: 0.15s;">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="lwlc-heading lwlc-feature__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.copy != blank -%}
+        <div class="lwlc-feature__copy">{{ section.settings.copy }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'lwl-canva.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "LWL Canva Feature",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    { "type": "color", "id": "background", "label": "Background color", "default": "#ffa9d1" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "info": "White is the design's choice; it is hard to read on light pink, so a darker color may suit better.", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#842b2c" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Leave empty to use the built-in photo." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Coming Alone? You’re Not the Only One!" },
+    { "type": "richtext", "id": "copy", "label": "Text" }
+  ],
+  "presets": [
+    { "name": "LWL Canva Feature" }
+  ]
+}
+{% endschema %}
