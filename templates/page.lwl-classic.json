@@ -1,13 +1,5 @@
 {
   "sections": {
-    "lwl_paper_intro": {
-      "type": "lwl-paper-intro",
-      "settings": {
-        "once_per_session": true,
-        "cover_page": true,
-        "backdrop_color": "#fcc0c5"
-      }
-    },
     "main": {
       "type": "main-page",
       "disabled": true,
@@ -108,7 +100,6 @@
     }
   },
   "order": [
-    "lwl_paper_intro",
     "main",
     "lwl_hero",
     "lwl_intro",
