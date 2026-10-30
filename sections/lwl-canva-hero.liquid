@@ -19,6 +19,10 @@
     })();
   </script>
 
+  {%- if section.settings.page_heading != blank -%}
+    <h1 class="lwlc-sr-only">{{ section.settings.page_heading | escape }}</h1>
+  {%- endif -%}
+
   <div class="lwlc-hero__bg" aria-hidden="true">
     {%- if section.settings.background != blank -%}
       <img
@@ -80,6 +84,7 @@
     { "type": "image_picker", "id": "background", "label": "Background photo", "info": "Leave empty to use the built-in crowd photo." },
     { "type": "range", "id": "background_opacity", "min": 20, "max": 100, "step": 1, "unit": "%", "label": "Background photo strength", "info": "How strongly the photo shows through the white wash.", "default": 57 },
     { "type": "image_picker", "id": "poster", "label": "Poster", "info": "Leave empty to use the built-in Season 4 poster." },
+    { "type": "text", "id": "page_heading", "label": "Page heading (not shown)", "info": "Read by screen readers and search engines; the poster carries the visible title.", "default": "Ladies Who Launch Season 4" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Get your tickets here" },
     { "type": "url", "id": "button_link", "label": "Button link" }
   ],
