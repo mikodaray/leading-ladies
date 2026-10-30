@@ -155,12 +155,55 @@
   outline-offset: 3px;
 }
 
-.lwlc-button--display {
-  padding: 0 2rem;
+/* plain text call to action (closing section): same Peace Sans lettering as the headings */
+.lwlc-textlink {
+  display: inline-block;
   font-family: 'LWL Peace Sans', Impact, 'Arial Black', sans-serif;
   font-weight: 400;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  line-height: 1.1;
   letter-spacing: -0.04em;
-  font-size: clamp(1.7rem, 5vw, 2.2rem);
+  text-transform: uppercase;
+  color: var(--lwlc-heading, #ffffff);
+  text-decoration: none;
+  transform-origin: 0 50%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lwlc-textlink:hover,
+.lwlc-textlink:focus-visible {
+  color: var(--lwlc-heading, #ffffff);
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+.lwlc-textlink:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 6px;
+}
+
+.lwlc-textlink.is-clicked {
+  animation: lwlc-text-click 0.6s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes lwlc-text-click {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(0.94);
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
 }
 
 /* on click: press in, pop, then burst; the link only opens once this has played */
@@ -216,6 +259,10 @@
   .lwlc-button {
     animation: none;
     transition: none;
+  }
+
+  .lwlc-textlink.is-clicked {
+    animation: none;
   }
 }
 
@@ -361,10 +408,10 @@
 
 .lwlc-card--pink {
   --card-bg: var(--lwlc-pink);
-  --card-text: var(--lwlc-maroon);
 }
 
 .lwlc-card__title {
+  color: var(--card-text);
   font-family: 'LWL Bricolage', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
   font-weight: 700 !important;
   font-size: clamp(2.2rem, 5.4vw, 2.8rem);
@@ -534,16 +581,16 @@
     text-wrap: wrap;
   }
 
+  .lwlc-textlink {
+    font-size: calc(27.84 * var(--u));
+  }
+
   .lwlc-button {
     width: calc(512 * var(--u));
     min-height: 0;
     height: calc(93 * var(--u));
     padding: 0;
     font-size: calc(29.33 * var(--u));
-  }
-
-  .lwlc-button--display {
-    font-size: calc(27.84 * var(--u));
   }
 
   @keyframes lwlc-pulse {
@@ -729,7 +776,7 @@
   .lwlc-closing__heading {
     font-size: calc(61.17 * var(--u));
     line-height: calc(58 * var(--u));
-    margin-bottom: calc(55 * var(--u));
+    margin-bottom: calc(56 * var(--u));
   }
 
   .lwlc-closing__copy {
@@ -737,10 +784,10 @@
   }
 
   .lwlc-closing__copy p + p {
-    margin-top: calc(86 * var(--u));
+    margin-top: calc(86.5 * var(--u));
   }
 
   .lwlc-closing__action {
-    margin-top: calc(56 * var(--u));
+    margin-top: calc(96 * var(--u));
   }
 }

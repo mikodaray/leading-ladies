@@ -137,7 +137,7 @@
       "settings": {
         "background": "#ffa9d1",
         "heading_color": "#ffffff",
-        "text_color": "#842b2c",
+        "text_color": "#ffffff",
         "heading": "Coming Alone? You’re Not the Only One!",
         "copy": "<p>You don’t need to bring a friend to belong in this room.</p><p>Some of the best connections begin when you show up somewhere new, introduce yourself, and discover how much you have in common with the women around you.</p><p>Come as you are. We’ll help make the introductions easier.</p>"
       }
@@ -191,9 +191,9 @@
       "settings": {
         "background": "#ffa9d1",
         "heading_color": "#ffffff",
-        "text_color": "#842b2c",
+        "text_color": "#ffffff",
         "watermark_opacity": 12,
-        "heading": "One Day. 100 Women. Endless Possibilities.",
+        "heading": "One Day. 100 Women. Endless Possibilities",
         "copy": "<p>You never know who you’ll meet, what you’ll learn, or which conversation might open your next door.</p><p>Come for the conversations. Leave with connections that could change your journey.</p><p>Seats are limited.</p>",
         "button_label": "Reserve your seat today!",
         "button_link": "/products/ladies-who-launch-season-4?lwlpopuphide=true"
